@@ -83,7 +83,7 @@ export const GROUPED_COLUMNS = [
       {
         Header: "Status",
         Footer: "Status",
-        accessor: "Status",
+        accessor: "status",
       },
       {
         Header: "Phone",

@@ -13,7 +13,7 @@ export const CREATE_APPLICATION = gql`
     $municipalAcc: String
     $race: String!
     $houseHoldHead: Boolean
-    $maritalStatus: Boolean
+    $maritalStatus: String
     $dependents: Boolean
     $bankStatement: String
     $idBook: String

@@ -44,6 +44,7 @@ const Wizard = () => {
     update(_, result) {
       if (result) {
         alert("Application Is Submitted!");
+        setGoSteps(1);
       }
     },
     onError(err) {
@@ -81,6 +82,13 @@ const Wizard = () => {
             country,
             race,
             address,
+            postalCode: "",
+            houseHoldHead: false,
+            maritalStatus: "",
+            dependents: false,
+            idBook: "",
+            bankStatement: "",
+            affidavid: "",
           },
         });
       } else {

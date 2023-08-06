@@ -9,8 +9,7 @@ import Index from "./jsx";
 import { AuthProvider, AuthContext } from "./context-auth/auth";
 
 const client = new ApolloClient({
-  uri: "http://localhost:5000/graphql", //'https://mdt-bk.herokuapp.com/graphql',
-  // uri: 'https://mdt-bk.herokuapp.com/graphql',
+  uri: "https://iverify-a171670bd5f6.herokuapp.com/graphql",
   cache: new InMemoryCache(),
 });
 
