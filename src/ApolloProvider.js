@@ -17,7 +17,7 @@ export default (
   <React.StrictMode>
     <ApolloProvider client={client}>
       <AuthProvider>
-        <BrowserRouter basename="/react/demo">
+        <BrowserRouter basename="/">
           <ThemeContext>
             <Index />
           </ThemeContext>
