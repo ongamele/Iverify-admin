@@ -11,13 +11,13 @@ export const COLUMNS = [
   {
     Header: "First Name",
     Footer: "First Name",
-    accessor: "first_name",
+    accessor: "name",
     Filter: ColumnFilter,
   },
   {
     Header: "Last Name",
     Footer: "Last Name",
-    accessor: "last_name",
+    accessor: "surname",
     Filter: ColumnFilter,
   },
   {
@@ -27,24 +27,22 @@ export const COLUMNS = [
     Filter: ColumnFilter,
   },
   {
-    Header: "Date of  Birth",
-    Footer: "Date of  Birth",
-    accessor: "date_of_birth",
-    Cell: ({ value }) => {
-      return format(new Date(value), "dd/mm/yyyy");
-    },
+    Header: "Address",
+    Footer: "Address",
+    accessor: "address",
+
     Filter: ColumnFilter,
   },
   {
     Header: "Status",
     Footer: "Status",
-    accessor: "Status",
+    accessor: "status",
     Filter: ColumnFilter,
   },
   {
     Header: "Phone",
     Footer: "Phone",
-    accessor: "phone",
+    accessor: "phoneNumber",
     Filter: ColumnFilter,
   },
 ];
@@ -62,12 +60,12 @@ export const GROUPED_COLUMNS = [
       {
         Header: "First Name",
         Footer: "First Name",
-        accessor: "first_name",
+        accessor: "name",
       },
       {
         Header: "Last Name",
         Footer: "Last Name",
-        accessor: "last_name",
+        accessor: "surname",
       },
     ],
   },
@@ -76,9 +74,9 @@ export const GROUPED_COLUMNS = [
     Footer: "Info",
     columns: [
       {
-        Header: "Date of  Birth",
-        Footer: "Date of  Birth",
-        accessor: "date_of_birth",
+        Header: "Address",
+        Footer: "Address",
+        accessor: "address",
       },
       {
         Header: "Status",

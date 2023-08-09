@@ -3,10 +3,6 @@ import { Link } from "react-router-dom";
 // image
 import logo from "../../images/logo-full.png";
 const ForgotPassword = ({ history }) => {
-  const onSubmit = (e) => {
-    e.preventDefault();
-    history.push("/dashboard");
-  };
   return (
     <div className="authincation h-100 p-meddle">
       <div className="container h-100">
@@ -23,7 +19,7 @@ const ForgotPassword = ({ history }) => {
                       </Link>
                     </div>
                     <h4 className="text-center mb-4 ">Forgot Password</h4>
-                    <form onSubmit={(e) => onSubmit(e)}>
+                    <form>
                       <div className="form-group">
                         <label className="">
                           <strong>Email</strong>
@@ -37,8 +33,7 @@ const ForgotPassword = ({ history }) => {
                       <div className="text-center">
                         <button
                           type="submit"
-                          className="btn btn-primary btn-block"
-                        >
+                          className="btn btn-primary btn-block">
                           SUBMIT
                         </button>
                       </div>

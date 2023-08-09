@@ -89,6 +89,7 @@ const StepOne = ({ sendDataToParent }) => {
               defaultValue={"option"}
               className="form-control form-control-md"
               onChange={(e) => setGender(e.target.value)}>
+              <option></option>
               <option vlaue="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
@@ -129,6 +130,7 @@ const StepOne = ({ sendDataToParent }) => {
               defaultValue={"option"}
               onChange={(e) => setRace(e.target.value)}
               className="form-control form-control-md">
+              <option></option>
               <option vlaue="African">African</option>
               <option value="White">White</option>
               <option value="Colourd">Colourd</option>

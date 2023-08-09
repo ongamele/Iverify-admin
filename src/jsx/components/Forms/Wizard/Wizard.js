@@ -24,9 +24,23 @@ const Wizard = () => {
   const [country, setCountry] = useState("");
   const [race, setRace] = useState("");
   const [address, setAddress] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [companyEmail, setCompanyEmail] = useState("");
+  const [householdHead, setHouseholdHead] = useState("");
+  const [dependents, setDependants] = useState("");
+  const [maritalStatus, setMaritalStatus] = useState("");
+  const [companyPhoneNumber, setCompanyPhoneNumber] = useState();
+  const [occupation, setOccupation] = useState("");
+  const [income, setIncome] = useState();
+  const [sourceOfIncome, setSourceOfIncome] = useState("");
+  const [idBook, setIdBook] = useState("");
+  const [affidavid, setAffidavid] = useState("");
+  const [bankStatement, setBankStatement] = useState("");
+  const [postalCode, setPostalCode] = useState("");
 
   const receiveDataFromChild = (data) => {
     setEmail(data.email);
+    setGender(data.gender);
     setName(data.name);
     setSurname(data.surname);
     setPhoneNumber(data.phoneNumber);
@@ -37,6 +51,18 @@ const Wizard = () => {
     setAddress(data.address);
   };
 
+  const receiveDataFromStep2Child = (data) => {
+    setPostalCode(data.postalCode);
+    setCompanyName(data.companyName);
+    setCompanyEmail(data.companyEmail);
+    setOccupation(data.occupation);
+    setIncome(data.income);
+    setSourceOfIncome(data.sourceOfIncome);
+    setHouseholdHead(data.householdHead);
+    setDependants(data.dependents);
+    setCompanyPhoneNumber(data.companyPhoneNumber);
+  };
+
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -44,7 +70,7 @@ const Wizard = () => {
     update(_, result) {
       if (result) {
         alert("Application Is Submitted!");
-        setGoSteps(1);
+        // setGoSteps(1);
       }
     },
     onError(err) {
@@ -60,17 +86,35 @@ const Wizard = () => {
       );
   };
   const onSubmit = async () => {
-    if (validateEmail(email)) {
-      if (
-        name != "" /*&&
-        surname != "" &&
-        idNumber != "" &&
-        phoneNumber != "" &&
-        email != "" &&
-        country != "" &&
-        race != "" &&
-        address != ""*/
-      ) {
+    if (
+      name != "" &&
+      surname != "" &&
+      idNumber != "" &&
+      phoneNumber != "" &&
+      email != "" &&
+      gender != "" &&
+      country != "" &&
+      race != "" &&
+      address != "" &&
+      companyName != "" &&
+      phoneNumber != null &&
+      country != "" &&
+      race != "" &&
+      address != "" &&
+      postalCode != "" &&
+      householdHead != null &&
+      maritalStatus != "" &&
+      dependents != null &&
+      companyPhoneNumber != "" &&
+      /*idBook != "" &&
+        bankStatement != "" &&
+        affidavid != "" &&*/
+      dependents != null &&
+      companyEmail != "" &&
+      income != null &&
+      sourceOfIncome != ""
+    ) {
+      if (validateEmail(email)) {
         createApplication({
           variables: {
             name,
@@ -78,28 +122,34 @@ const Wizard = () => {
             surname,
             idNumber,
             email,
+            gender,
             phoneNumber,
             country,
             race,
             address,
-            postalCode: "",
-            houseHoldHead: false,
-            maritalStatus: "",
-            dependents: false,
-            idBook: "",
-            bankStatement: "",
-            affidavid: "",
+            postalCode,
+            householdHead,
+            maritalStatus,
+            dependents,
+            idBook,
+            bankStatement,
+            affidavid,
+            companyName,
+            companyPhoneNumber,
+            companyEmail,
+            income: parseInt(income),
+            sourceOfIncome,
           },
         });
       } else {
-        setErrorMessage("Please fill in all fields.");
+        setErrorMessage("Enter a valid email address!");
       }
     } else {
-      setErrorMessage("Enter a valid email address!");
+      setErrorMessage("Please fill in all fields.");
     }
   };
 
-  function stepOneFunc(num) {
+  function submitFunction() {
     onSubmit();
     if (errorMessage == "") {
       // setGoSteps(num);
@@ -135,7 +185,7 @@ const Wizard = () => {
                     <div className="text-end toolbar toolbar-bottom p-2">
                       <button
                         className="btn btn-primary sw-btn-next"
-                        onClick={() => stepOneFunc(1)}>
+                        onClick={() => setGoSteps(1)}>
                         Next
                       </button>
                     </div>
@@ -143,7 +193,7 @@ const Wizard = () => {
                 )}
                 {goSteps === 1 && (
                   <>
-                    <StepTwo />
+                    <StepTwo sendDataToParent={receiveDataFromStep2Child} />
                     <div className="text-end toolbar toolbar-bottom p-2">
                       <button
                         className="btn btn-secondary sw-btn-prev me-1"
@@ -186,7 +236,7 @@ const Wizard = () => {
                       </button>
                       <button
                         className="btn btn-primary sw-btn-next ms-1"
-                        onClick={() => setGoSteps(4)}>
+                        onClick={() => submitFunction()}>
                         Submit
                       </button>
                     </div>

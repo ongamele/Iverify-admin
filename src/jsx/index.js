@@ -1,13 +1,17 @@
-import React, { useContext } from "react";
+import React, { lazy, Suspense, useEffect, useContext } from "react";
 
 /// React router dom
 import { Routes, Route, Outlet } from "react-router-dom";
+import { AuthProvider, AuthContext } from "./components/context-auth/auth";
 
 /// Css
 import "./index.css";
 import "./chart.css";
 import "./step.css";
-
+//Authentication pages
+import Register from "./pages/Registration";
+import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgotPassword";
 /// Layout
 import Nav from "./layouts/nav";
 import Footer from "./layouts/Footer";
@@ -112,7 +116,7 @@ const Markup = () => {
   // const { menuToggle } = useContext(ThemeContext);
   const allroutes = [
     /// Dashboard
-    { url: "", component: <Home /> },
+    // { url: "/", component: <Home /> },
     { url: "dashboard", component: <Home /> },
     { url: "dashboard-dark", component: <DashboardDark /> },
     { url: "guest-list", component: <GuestList /> },
@@ -218,24 +222,29 @@ const Markup = () => {
   let pagePath = path.split("-").includes("page");
   return (
     <>
-      <Routes>
-        <Route path="page-lock-screen" element={<LockScreen />} />
-        <Route path="page-error-400" element={<Error400 />} />
-        <Route path="page-error-403" element={<Error403 />} />
-        <Route path="page-error-404" element={<Error404 />} />
-        <Route path="page-error-500" element={<Error500 />} />
-        <Route path="page-error-503" element={<Error503 />} />
-        <Route element={<MainLayout />}>
-          {allroutes.map((data, i) => (
-            <Route
-              key={i}
-              exact
-              path={`${data.url}`}
-              element={data.component}
-            />
-          ))}
-        </Route>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="page-lock-screen" element={<LockScreen />} />
+          <Route path="page-error-400" element={<Error400 />} />
+          <Route path="page-error-403" element={<Error403 />} />
+          <Route path="page-error-404" element={<Error404 />} />
+          <Route path="page-error-500" element={<Error500 />} />
+          <Route path="page-error-503" element={<Error503 />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/page-forgot-password" element={<ForgotPassword />} />
+          <Route element={<MainLayout />}>
+            {allroutes.map((data, i) => (
+              <Route
+                key={i}
+                exact
+                path={`${data.url}`}
+                element={data.component}
+              />
+            ))}
+          </Route>
+        </Routes>
+      </AuthProvider>
       <Setting />
       <ScrollToTop />
     </>

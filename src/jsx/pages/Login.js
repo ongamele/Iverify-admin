@@ -1,44 +1,41 @@
-import React, { useState } from "react";
-import { connect, useDispatch } from "react-redux";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  loadingToggleAction,
-  loginAction,
-} from "../../store/actions/AuthActions";
+import { useMutation } from "@apollo/react-hooks";
 
 import "./style.css";
 
 // image
 import logo from "../../images/logo-full.png";
-import loginbg from "../../images/pic1.png";
+import { AuthContext } from "../components/context-auth/auth";
+import { LOGIN_USER } from "../../Graphql/Mutations";
 
 function Login(props) {
-  const [email, setEmail] = useState("demo@example.com");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState();
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
-  const [password, setPassword] = useState("123456");
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const context = useContext(AuthContext);
+  //const { user } = useContext(AuthContext);
 
-  function onLogin(e) {
-    e.preventDefault();
-    let error = false;
-    const errorObj = { ...errorsObj };
-    if (email === "") {
-      errorObj.email = "Email is Required";
-      error = true;
-    }
-    if (password === "") {
-      errorObj.password = "Password is Required";
-      error = true;
-    }
-    setErrors(errorObj);
-    if (error) {
-      return;
-    }
-    dispatch(loadingToggleAction(true));
-    dispatch(loginAction(email, password, navigate));
+  const [loginUser, { loading }] = useMutation(LOGIN_USER, {
+    update(_, result) {
+      context.login(result.data.login);
+      navigate("/dashboard");
+    },
+    onError(err) {
+      alert("User Not Found! " + err);
+    },
+
+    variables: {
+      email,
+      password,
+    },
+  });
+
+  function login() {
+    loginUser();
   }
 
   return (
@@ -71,75 +68,64 @@ function Login(props) {
                       {props.successMessage}
                     </div>
                   )}
-                  <form onSubmit={onLogin} className="form-validate">
-                    <h3 className="text-center mb-4 text-black">
-                      Sign in your account
-                    </h3>
-                    <div className="form-group mb-3">
-                      <label className="mb-1" htmlFor="val-email">
-                        <strong>Email</strong>
-                      </label>
-                      <div>
-                        <input
-                          type="email"
-                          className="form-control"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Type Your Email Address"
-                        />
-                      </div>
-                      {errors.email && (
-                        <div className="text-danger fs-12">{errors.email}</div>
-                      )}
-                    </div>
-                    <div className="form-group mb-3">
-                      <label className="mb-1">
-                        <strong>Password</strong>
-                      </label>
+                  <h3 className="text-center mb-4 text-black">
+                    Sign in your account
+                  </h3>
+                  <div className="form-group mb-3">
+                    <label className="mb-1" htmlFor="val-email">
+                      <strong>Email</strong>
+                    </label>
+                    <div>
                       <input
-                        type="password"
+                        type="email"
                         className="form-control"
-                        value={password}
-                        placeholder="Type Your Password"
-                        onChange={(e) => setPassword(e.target.value)}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Type Your Email Address"
                       />
-                      {errors.password && (
-                        <div className="text-danger fs-12">
-                          {errors.password}
-                        </div>
-                      )}
                     </div>
-                    <div className="form-row d-flex justify-content-between mt-4 mb-2">
-                      <div className="form-group mb-3">
-                        <div className="custom-control custom-checkbox ml-1">
-                          <input
-                            type="checkbox"
-                            className="form-check-input"
-                            id="basic_checkbox_1"
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="basic_checkbox_1">
-                            Remember my preference
-                          </label>
-                        </div>
+                    {errors.email && (
+                      <div className="text-danger fs-12">{errors.email}</div>
+                    )}
+                  </div>
+                  <div className="form-group mb-3">
+                    <label className="mb-1">
+                      <strong>Password</strong>
+                    </label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      value={password}
+                      placeholder="Type Your Password"
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {errors.password && (
+                      <div className="text-danger fs-12">{errors.password}</div>
+                    )}
+                  </div>
+                  <div className="form-row d-flex justify-content-between mt-4 mb-2">
+                    <div className="form-group mb-3">
+                      <div className="custom-control custom-checkbox ml-1">
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="basic_checkbox_1"
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="basic_checkbox_1">
+                          Remember my preference
+                        </label>
                       </div>
                     </div>
-                    <div className="text-center form-group mb-3">
-                      <button
-                        type="submit"
-                        className="btn btn-primary btn-block login-button">
-                        Sign In
-                      </button>
-                    </div>
-                  </form>
-                  <div className="new-account mt-3">
-                    <p>
-                      Don't have an account?{" "}
-                      <Link className="text-primary" to="/page-register">
-                        Sign up
-                      </Link>
-                    </p>
+                  </div>
+                  <div className="text-center form-group mb-3">
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-block login-button"
+                      onClick={login}>
+                      Sign In
+                    </button>
                   </div>
                 </div>
               </div>
@@ -151,11 +137,4 @@ function Login(props) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    errorMessage: state.auth.errorMessage,
-    successMessage: state.auth.successMessage,
-    showLoading: state.auth.showLoading,
-  };
-};
-export default connect(mapStateToProps)(Login);
+export default Login;

@@ -1,11 +1,13 @@
 import { gql } from "@apollo/client";
 
 export const GET_APPLICATIONS = gql`
-  query getApplications {
-    getApplications {
+  query getApplications($userId: String!) {
+    getApplications(userId: $userId) {
+      id
       userId
       name
       surname
+      email
       phoneNumber
       address
       postalCode
@@ -18,5 +20,8 @@ export const GET_APPLICATIONS = gql`
       bankStatement
       idBook
       affidavid
+      status
+      createdAt
+    }
   }
 `;

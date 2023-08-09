@@ -18,6 +18,13 @@ export const CREATE_APPLICATION = gql`
     $bankStatement: String
     $idBook: String
     $affidavid: String
+    $gender: String!
+    $companyName: String
+    $companyPhoneNumber: String
+    $companyEmail: String
+    $occupation: String
+    $income: Int
+    $sourceOfIncome: String
   ) {
     createApplication(
       applicationInput: {
@@ -37,6 +44,13 @@ export const CREATE_APPLICATION = gql`
         bankStatement: $bankStatement
         idBook: $idBook
         affidavid: $affidavid
+        gender: $gender
+        companyName: $companyName
+        companyPhoneNumber: $companyPhoneNumber
+        companyEmail: $companyEmail
+        occupation: $occupation
+        income: $income
+        sourceOfIncome: $sourceOfIncome
       }
     ) {
       userId
@@ -54,6 +68,48 @@ export const CREATE_APPLICATION = gql`
       bankStatement
       idBook
       affidavid
+    }
+  }
+`;
+
+export const CREATE_USER = gql`
+  mutation createUser(
+    $name: String!
+    $surname: String!
+    $phoneNumber: String!
+    $email: String!
+    $idNumber: String!
+  ) {
+    createUser(
+      registerInput: {
+        name: $name
+        surname: $surnaame
+        phoneNumber: $phoneNumber
+        email: $email
+        idNumber: $idNumber
+      }
+    ) {
+      id
+      name
+      surname
+      phoneNumber
+      email
+      idNumber
+      createdAt
+    }
+  }
+`;
+
+export const LOGIN_USER = gql`
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      id
+      name
+      surname
+      phoneNumber
+      email
+      idNumber
+      createdAt
     }
   }
 `;

@@ -3,11 +3,9 @@ import { Link } from "react-router-dom";
 
 //Import Components
 import { ThemeContext } from "../../../context/ThemeContext";
-import ReservationStats from "./Dashboard/ReservationStats";
-import LatestReview from "./Dashboard/LatestReview";
-import RecentBooking from "./Dashboard/RecentBooking";
-
+import { AuthContext } from "../context-auth/auth";
 const Home = () => {
+  const { user } = useContext(AuthContext);
   const { changeBackground } = useContext(ThemeContext);
   useEffect(() => {
     changeBackground({ value: "light", label: "Light" });
@@ -31,7 +29,7 @@ const Home = () => {
                           />
                         </span>
                         <div className="ms-4">
-                          <h2 className="mb-0 font-w600">1</h2>
+                          <h2 className="mb-0 font-w600">3</h2>
                           <p className="mb-0 text-nowrap">Total Requests</p>
                         </div>
                       </div>
@@ -49,7 +47,7 @@ const Home = () => {
                           />
                         </span>
                         <div className="ms-4">
-                          <h2 className="mb-0 font-w600">1</h2>
+                          <h2 className="mb-0 font-w600">3</h2>
                           <p className="mb-0 text-nowrap ">New Requests</p>
                         </div>
                       </div>
@@ -106,7 +104,7 @@ const Home = () => {
                               Total Approvals
                             </span>
                             <span className="fs-20 font-w600 text-white">
-                              <span className="pe-2"></span>683
+                              <span className="pe-2"></span>0
                             </span>
                           </div>
                           <div className="progress default-progress h-auto">

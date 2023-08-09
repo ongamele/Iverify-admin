@@ -1,4 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useContext } from "react";
+
+import { useQuery } from "@apollo/react-hooks";
 import PageTitle from "../../../layouts/PageTitle";
 import {
   useTable,
@@ -11,10 +13,29 @@ import { COLUMNS } from "./Columns";
 import { GlobalFilter } from "./GlobalFilter";
 //import './table.css';
 import "./filtering.css";
+import { AuthContext } from "../../context-auth/auth";
+import { GET_APPLICATIONS } from "../../../../Graphql/Queries";
 
 export const FilteringTable = () => {
+  const { user } = useContext(AuthContext);
+
+  const { loading: userLoading, data: userApplications } = useQuery(
+    GET_APPLICATIONS,
+    {
+      pollInterval: 4000,
+      variables: {
+        userId: user.id,
+      },
+    }
+  );
+  //Assign Data
+  var newData = [];
+  if (userApplications) {
+    newData = userApplications.getApplications;
+  }
+
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => MOCK_DATA, []);
+  const data = useMemo(() => newData, []);
   const tableInstance = useTable(
     {
       columns,

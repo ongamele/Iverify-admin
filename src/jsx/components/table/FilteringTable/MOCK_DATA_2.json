@@ -1,12 +1,10 @@
 [
   {
-    "id": 1,
-    "first_name": "Ongamele",
-    "last_name": "Gebhuza",
+    "idNumber": 3789584,
+    "name": "Ongamele",
+    "surname": "Gebhuza",
     "email": "ongamele@gmail.com",
-    "date_of_birth": "1991-09-18T06:18:12Z",
-    "age": 31,
-    "country": "South Africa",
+    "address": "Johannesburg",
     "status": "Pending",
     "phone": "0788415424"
   }
