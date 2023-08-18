@@ -45,11 +45,18 @@ function Login(props) {
           <div className="text-center mb-4 pt-5">
             <img src={logo} alt="" className="login-logo" />
           </div>
-          <h3 className="mb-2">Welcome back!</h3>
-          <p>
-            Indegent Verification <br />
-            Software
-          </p>
+          <h3 className="mb-2">Welcome!</h3>
+          <h4>
+            You are about to log into the online Iverify Application of Zimako
+            Group. Access to this platform is restricted.
+            <br />
+            Do not attempt to enter this site if you do not have the explicit
+            consent of Zimako Group and your own unique login credentials.
+            <br /> This site contains personal information under the control of
+            Zimako Group and is subject to Zimako Group rules regarding the
+            processing of personal information and further subject to the
+            Iverify Terms of Use
+          </h4>
         </div>
       </div>
       <div className="container flex-row-fluid d-flex flex-column justify-content-center position-relative overflow-hidden p-7 mx-auto login-right-container">

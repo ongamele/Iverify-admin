@@ -6,11 +6,10 @@ export const CREATE_APPLICATION = gql`
     $email: String!
     $name: String!
     $surname: String!
-    $phoneNumber: String!
+    $phoneNumber: Int!
     $address: String!
     $postalCode: String
     $country: String!
-    $municipalAcc: String
     $race: String!
     $houseHoldHead: Boolean
     $maritalStatus: String
@@ -22,9 +21,24 @@ export const CREATE_APPLICATION = gql`
     $companyName: String
     $companyPhoneNumber: String
     $companyEmail: String
-    $occupation: String
     $income: Int
     $sourceOfIncome: String
+    $standType: String
+    $suburb: String
+    $wardNumber: String
+    $municipality: String
+    $companyRegNumber: String
+    $companyType: String
+    $applicantIdNumber: String
+    $applicantName: String
+    $applicantSurname: String
+    $applicantPhoneNumber: Int
+    $applicantRelationship: String
+    $spauseIdNumber: String
+    $spauseName: String
+    $spauseSurname: String
+    $sassaNumber: String
+    $ageRange: String
   ) {
     createApplication(
       applicationInput: {
@@ -36,7 +50,6 @@ export const CREATE_APPLICATION = gql`
         address: $address
         postalCode: $postalCode
         country: $country
-        municipalAcc: $municipalAcc
         race: $race
         houseHoldHead: $houseHoldHead
         maritalStatus: $maritalStatus
@@ -48,9 +61,24 @@ export const CREATE_APPLICATION = gql`
         companyName: $companyName
         companyPhoneNumber: $companyPhoneNumber
         companyEmail: $companyEmail
-        occupation: $occupation
         income: $income
         sourceOfIncome: $sourceOfIncome
+        standType: $standType
+        suburb: $suburb
+        wardNumber: $wardNumber
+        municipality: $municipality
+        companyRegNumber: $companyRegNumber
+        companyType: $companyType
+        applicantIdNumber: $applicantIdNumber
+        applicantName: $applicantName
+        applicantSurname: $applicantSurname
+        applicantPhoneNumber: $applicantPhoneNumber
+        applicantRelationship: $applicantRelationship
+        spauseIdNumber: $spauseIdNumber
+        spauseName: $spauseName
+        spauseSurname: $spauseSurname
+        sassaNumber: $sassaNumber
+        ageRange: $ageRange
       }
     ) {
       userId
@@ -60,7 +88,6 @@ export const CREATE_APPLICATION = gql`
       address
       postalCode
       country
-      municipalAcc
       race
       houseHoldHead
       maritalStatus

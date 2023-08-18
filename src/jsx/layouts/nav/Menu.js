@@ -120,7 +120,7 @@ export const MenuList = [
     ],
   },*/
   //Charts
-  {
+  /*{
     title: "Reports",
     classsChange: "mm-collapse",
     iconStyle: <i className="fas fa-chart-line"></i>,
@@ -140,9 +140,9 @@ export const MenuList = [
       {
         title: "Apexchart",
         to: "chart-apexchart",
-      },*/
+      },
     ],
-  },
+  },*/
   //Boosttrap
   /*{
     title: "Bootstrap",
@@ -248,12 +248,12 @@ export const MenuList = [
     ],
   },*/
   //Widget
-  {
+  /*{
     title: "Users",
     //classsChange: 'mm-collapse',
     iconStyle: <i className="fas fa-user-check"></i>,
     to: "widget-basic",
-  },
+  },*/
   //Forms
   {
     title: "New Application",

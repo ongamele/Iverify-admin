@@ -96,12 +96,23 @@ export const FilteringTable = () => {
                     <tr {...row.getRowProps()}>
                       {row.cells.map((cell) => {
                         return (
-                          <td {...cell.getCellProps()}>
-                            {" "}
-                            {cell.render("Cell")}{" "}
-                          </td>
+                          <>
+                            <td {...cell.getCellProps()}>
+                              {" "}
+                              {cell.render("Cell")}{" "}
+                            </td>
+                          </>
                         );
                       })}
+                      <td>
+                        <button
+                          className="btn btn-primary btn-sm sw-btn-next ms-1"
+                          onClick={() =>
+                            alert("Can.t upload to pending results!")
+                          }>
+                          Docs
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}

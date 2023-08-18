@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 //import Multistep from "react-multistep";
 import { Stepper, Step } from "react-form-stepper";
 
@@ -11,11 +11,14 @@ import PageTitle from "../../../layouts/PageTitle";
 import { useMutation } from "@apollo/react-hooks";
 import { CREATE_APPLICATION } from "../../../../Graphql/Mutations.jsx";
 import { Alert } from "react-bootstrap";
+import { AuthContext } from "../../context-auth/auth";
 
 const Wizard = () => {
+  const { user } = useContext(AuthContext);
+  const userId = user.id;
   const [goSteps, setGoSteps] = useState(0);
   const [email, setEmail] = useState("");
-  const [userId, setUserId] = useState("2343934932");
+  //const [userId, setUserId] = useState("2343934932");
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -24,19 +27,43 @@ const Wizard = () => {
   const [country, setCountry] = useState("");
   const [race, setRace] = useState("");
   const [address, setAddress] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [companyEmail, setCompanyEmail] = useState("");
-  const [householdHead, setHouseholdHead] = useState("");
-  const [dependents, setDependants] = useState("");
-  const [maritalStatus, setMaritalStatus] = useState("");
-  const [companyPhoneNumber, setCompanyPhoneNumber] = useState();
-  const [occupation, setOccupation] = useState("");
-  const [income, setIncome] = useState();
-  const [sourceOfIncome, setSourceOfIncome] = useState("");
+
   const [idBook, setIdBook] = useState("");
   const [affidavid, setAffidavid] = useState("");
   const [bankStatement, setBankStatement] = useState("");
   const [postalCode, setPostalCode] = useState("");
+  const [standType, setStandType] = useState("");
+  const [suburb, setSuburb] = useState("");
+  const [wardNumber, setWardNumber] = useState("");
+  const [municipality, setMunicipality] = useState("");
+
+  //Step Two
+  const [otp, setOtp] = useState();
+
+  //Step three
+  const [income, setIncome] = useState();
+  const [sourceOfIncome, setSourceOfIncome] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [companyEmail, setCompanyEmail] = useState("");
+  const [companyPhoneNumber, setCompanyPhoneNumber] = useState();
+  const [companyRegNumber, setCompanyRegNumber] = useState("");
+  const [companyType, setCompanyType] = useState();
+
+  const [applicantIdNumber, setApplicantIdNumber] = useState("");
+  const [applicantName, setApplicantName] = useState("");
+  const [applicantSurname, setApplicantSurname] = useState("");
+  const [applicantPhoneNumber, setApplicantPhoneNumber] = useState();
+  const [applicantRelationship, setApplicantRelationship] = useState("");
+
+  const [householdHead, setHouseholdHead] = useState("");
+  const [dependents, setDependants] = useState("");
+  const [maritalStatus, setMaritalStatus] = useState("");
+  const [spauseIdNumber, setSpauseIdNumber] = useState("");
+  const [spauseName, setSpauseName] = useState("");
+  const [spauseSurname, setSpauseSurname] = useState("");
+
+  const [sassaNumber, setSassaNumber] = useState("");
+  const [ageRange, setAgeRange] = useState("");
 
   const receiveDataFromChild = (data) => {
     setEmail(data.email);
@@ -49,18 +76,38 @@ const Wizard = () => {
     setCountry(data.country);
     setRace(data.race);
     setAddress(data.address);
+    setStandType(data.standType);
+    setSuburb(data.suburb);
+    setWardNumber(data.wardNumber);
+    setMunicipality(data.municipality);
   };
 
-  const receiveDataFromStep2Child = (data) => {
+  const receiveDataFromStep3Child = (data) => {
     setPostalCode(data.postalCode);
     setCompanyName(data.companyName);
     setCompanyEmail(data.companyEmail);
-    setOccupation(data.occupation);
     setIncome(data.income);
     setSourceOfIncome(data.sourceOfIncome);
     setHouseholdHead(data.householdHead);
     setDependants(data.dependents);
     setCompanyPhoneNumber(data.companyPhoneNumber);
+    setAgeRange(data.ageRange);
+    setCompanyRegNumber(data.companyRegNumber);
+    setCompanyType(data.companyType);
+    setApplicantIdNumber(data.applicantIdNumber);
+    setApplicantName(data.applicantName);
+    setApplicantSurname(data.applicantSurname);
+    setApplicantPhoneNumber(data.applicantPhoneNumber);
+    setApplicantRelationship(data.applicantRelationship);
+    setMaritalStatus(data.maritalStatus);
+    setSpauseIdNumber(data.setSpauseIdNumber);
+    setSpauseName(data.spauseName);
+    setSpauseSurname(data.setSpauseSurname);
+    setSassaNumber(data.sassaNumber);
+  };
+
+  const receiveDataFromStep2Child = (data) => {
+    setOtp(data.otp);
   };
 
   const [successMessage, setSuccessMessage] = useState("");
@@ -87,8 +134,8 @@ const Wizard = () => {
   };
   const onSubmit = async () => {
     if (
-      name != "" &&
-      surname != "" &&
+      name != ""
+      /*surname != "" &&
       idNumber != "" &&
       phoneNumber != "" &&
       email != "" &&
@@ -96,7 +143,6 @@ const Wizard = () => {
       country != "" &&
       race != "" &&
       address != "" &&
-      companyName != "" &&
       phoneNumber != null &&
       country != "" &&
       race != "" &&
@@ -105,14 +151,9 @@ const Wizard = () => {
       householdHead != null &&
       maritalStatus != "" &&
       dependents != null &&
-      companyPhoneNumber != "" &&
-      /*idBook != "" &&
-        bankStatement != "" &&
-        affidavid != "" &&*/
       dependents != null &&
-      companyEmail != "" &&
       income != null &&
-      sourceOfIncome != ""
+      sourceOfIncome != ""*/
     ) {
       if (validateEmail(email)) {
         createApplication({
@@ -123,7 +164,7 @@ const Wizard = () => {
             idNumber,
             email,
             gender,
-            phoneNumber,
+            phoneNumber: parseInt(phoneNumber),
             country,
             race,
             address,
@@ -135,10 +176,26 @@ const Wizard = () => {
             bankStatement,
             affidavid,
             companyName,
-            companyPhoneNumber,
+            companyPhoneNumber: parseInt(companyPhoneNumber),
             companyEmail,
             income: parseInt(income),
             sourceOfIncome,
+            standType,
+            suburb,
+            wardNumber,
+            municipality,
+            companyRegNumber,
+            companyType,
+            applicantIdNumber,
+            applicantName,
+            applicantSurname,
+            applicantPhoneNumber,
+            applicantRelationship,
+            spauseIdNumber,
+            spauseName,
+            spauseSurname,
+            sassaNumber,
+            ageRange,
           },
         });
       } else {
@@ -210,7 +267,7 @@ const Wizard = () => {
                 )}
                 {goSteps === 2 && (
                   <>
-                    <StepThree />
+                    <StepThree sendDataToParent={receiveDataFromStep3Child} />
                     <div className="text-end toolbar toolbar-bottom p-2">
                       <button
                         className="btn btn-secondary sw-btn-prev me-1"

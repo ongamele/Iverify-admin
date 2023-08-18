@@ -34,7 +34,22 @@ const StepFour = () => {
 
   return (
     <section>
-      <div className="row emial-setup">
+      <div className="row">
+        <div className="col-sm-4 mb-2">
+          <h4>Declaration *</h4>
+        </div>
+        <div className="col-6 col-sm-6 mb-2">
+          <h4>
+            • I declare that the information provided in this application for
+            indigent verification, is to the best of my knowledge and its true
+            and correct. <br />• I accept that should it be found that this
+            application contains fraudulent information, the benefits will be
+            suspended, and I cannot apply for indigent status, until the next
+            financial year.
+          </h4>
+        </div>
+      </div>
+      {/*<div className="row emial-setup">
         <div className="col-lg-4 col-sm-6 col-6">
           <div className="form-group mb-3">
             <label
@@ -96,7 +111,7 @@ const StepFour = () => {
           </div>
         </div>
         <button className="btn btn-primary sw-btn-next ms-1">Upload</button>
-      </div>
+      </div>*/}
     </section>
   );
 };

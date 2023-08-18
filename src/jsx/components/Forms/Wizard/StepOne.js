@@ -11,6 +11,13 @@ const StepOne = ({ sendDataToParent }) => {
   const [country, setCountry] = useState("");
   const [race, setRace] = useState("");
   const [address, setAddress] = useState("");
+  const [standType, setStandType] = useState("");
+  const [suburb, setSuburb] = useState("");
+  const [wardNumber, setWardNumber] = useState("");
+  const [municipality, setMunicipality] = useState("");
+
+  //Consent
+  const [isConsent, setIsConsent] = useState(false);
 
   const data = {
     email,
@@ -23,136 +30,224 @@ const StepOne = ({ sendDataToParent }) => {
     country,
     race,
     address,
+    standType,
+    suburb,
+    wardNumber,
+    municipality,
   };
   sendDataToParent(data);
 
   return (
     <section>
-      <div className="row">
-        <div className="col-lg-6 mb-2">
-          <div className="form-group mb-3">
-            <label className="text-label">First Name*</label>
-            <input
-              type="text"
-              name="firstName"
-              className="form-control"
-              placeholder="Florence"
-              required
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
+      <div className="row" style={{ marginBottom: 10 }}>
+        <div className="col-sm-4 mb-2">
+          <h4>Consent *</h4>
         </div>
-        <div className="col-lg-6 mb-2">
-          <div className="form-group mb-3">
-            <label className="text-label">Last Name*</label>
-            <input
-              type="text"
-              name="lastName"
-              className="form-control"
-              placeholder="Ngwenya"
-              required
-              onChange={(e) => setSurname(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="col-lg-6 mb-2">
-          <div className="form-group mb-3">
-            <label className="text-label">Email Address*</label>
-            <input
-              type="email"
-              className="form-control"
-              id="inputGroupPrepend2"
-              aria-describedby="inputGroupPrepend2"
-              placeholder="example@example.com"
-              required
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="col-lg-6 mb-2">
-          <div className="form-group mb-3">
-            <label className="text-label">Phone Number*</label>
-            <input
-              type="text"
-              name="phoneNumber"
-              className="form-control"
-              placeholder="(+27) 408-657-907"
-              required
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="col-lg-6 mb-2">
-          <div className="form-group mb-3">
-            <label className="text-label">Gender*</label>
-            <select
-              defaultValue={"option"}
-              className="form-control form-control-md"
-              onChange={(e) => setGender(e.target.value)}>
-              <option></option>
-              <option vlaue="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-        </div>
-        <div className="col-lg-6 mb-2">
-          <div className="form-group mb-3">
-            <label className="text-label">ID Number*</label>
-            <input
-              type="number"
-              name="lastName"
-              className="form-control"
-              placeholder="9109182848484"
-              required
-              onChange={(e) => setIdNumber(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="col-lg-6 mb-2">
-          <div className="form-group mb-3">
-            <label className="text-label">Nationality*</label>
-            <input
-              type="text"
-              className="form-control"
-              id="inputGroupPrepend2"
-              aria-describedby="inputGroupPrepend2"
-              placeholder="South Africa"
-              required
-              onChange={(e) => setCountry(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="col-lg-6 mb-2">
-          <div className="form-group mb-3">
-            <label className="text-label">Race*</label>
-            <select
-              defaultValue={"option"}
-              onChange={(e) => setRace(e.target.value)}
-              className="form-control form-control-md">
-              <option></option>
-              <option vlaue="African">African</option>
-              <option value="White">White</option>
-              <option value="Colourd">Colourd</option>
-              <option value="Indian">Indian</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="col-lg-12 mb-3">
-          <div className="form-group mb-3">
-            <label className="text-label">Where are you from*</label>
-            <input
-              type="text"
-              name="place"
-              className="form-control"
-              required
-              onChange={(e) => setAddress(e.target.value)}
-            />
-          </div>
+        <div className="col-6 col-sm-6 mb-2">
+          <h4>
+            I consent to and accept that Vhembe District Municipality will use a
+            third party (i.e. Credit Bureau) to conduct verification and access
+            my personal credit information to assess my indigent status. I give
+            consent to Vhembe District Municipality to utilise my personal
+            information for Indigent verification analysis and other activities
+            such as economic and financial and feasibility studies. Click on
+            next to consent.
+          </h4>
+          <label className="text-label">Accept to continue</label>
+          <select
+            defaultValue={"option"}
+            className="form-control form-control-md"
+            onChange={(e) => setIsConsent(e.target.value)}>
+            <option value="false">Disagree</option>
+            <option vlaue="true">Agree</option>
+          </select>
         </div>
       </div>
+
+      {isConsent && (
+        <>
+          <div className="row">
+            <div className="col-lg-6 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">First Name*</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  className="form-control"
+                  placeholder="Florence"
+                  required
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="col-lg-6 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">Last Name*</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  className="form-control"
+                  placeholder="Ngwenya"
+                  required
+                  onChange={(e) => setSurname(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="col-lg-6 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">Email Address*</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  id="inputGroupPrepend2"
+                  aria-describedby="inputGroupPrepend2"
+                  placeholder="florence@eiverify.co.za"
+                  required
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="col-lg-6 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">Phone Number*</label>
+                <input
+                  type="number"
+                  name="phoneNumber"
+                  className="form-control"
+                  placeholder="(+27) 408-657-907"
+                  required
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="col-lg-6 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">Gender*</label>
+                <select
+                  defaultValue={"option"}
+                  className="form-control form-control-md"
+                  onChange={(e) => setGender(e.target.value)}>
+                  <option></option>
+                  <option vlaue="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div className="col-lg-6 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">ID Number*</label>
+                <input
+                  type="number"
+                  name="lastName"
+                  className="form-control"
+                  placeholder="9109182848484"
+                  required
+                  onChange={(e) => setIdNumber(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="col-lg-6 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">Nationality*</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="inputGroupPrepend2"
+                  aria-describedby="inputGroupPrepend2"
+                  placeholder="South Africa"
+                  required
+                  onChange={(e) => setCountry(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="col-lg-6 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">Race*</label>
+                <select
+                  defaultValue={"option"}
+                  onChange={(e) => setRace(e.target.value)}
+                  className="form-control form-control-md">
+                  <option></option>
+                  <option vlaue="African">African</option>
+                  <option value="White">White</option>
+                  <option value="Colourd">Colourd</option>
+                  <option value="Indian">Indian</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div className="col-lg-6 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">Stand Type*</label>
+                <select
+                  defaultValue={"option"}
+                  onChange={(e) => setStandType(e.target.value)}
+                  className="form-control form-control-md">
+                  <option></option>
+                  <option vlaue="Residential">Residential</option>
+                  <option value="Business">Business</option>
+                  <option value="Plot">Plot</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="col-lg-6 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">Ward Number*</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="inputGroupPrepend2"
+                  aria-describedby="inputGroupPrepend2"
+                  placeholder="South Africa"
+                  required
+                  onChange={(e) => setWardNumber(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="col-lg-6 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">Suburb*</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="inputGroupPrepend2"
+                  aria-describedby="inputGroupPrepend2"
+                  placeholder="Alberton"
+                  required
+                  onChange={(e) => setSuburb(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-lg-6 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">Where are you from*</label>
+                <input
+                  type="text"
+                  name="place"
+                  className="form-control"
+                  required
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="col-lg-12 mb-2">
+              <div className="form-group mb-3">
+                <label className="text-label">Municipality*</label>
+                <input
+                  type="text"
+                  name="place"
+                  className="form-control"
+                  required
+                  onChange={(e) => setMunicipality(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </section>
   );
 };

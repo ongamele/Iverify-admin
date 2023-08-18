@@ -25,3 +25,27 @@ export const GET_APPLICATIONS = gql`
     }
   }
 `;
+
+export const GET_SUCCESSFUL_APPLICATIONS = gql`
+  query getSuccessfulApplications($userId: String!) {
+    getSuccessfulApplications(userId: $userId)
+  }
+`;
+
+export const GET_FAILED_APPLICATIONS = gql`
+  query getFailedApplications($userId: String!) {
+    getFailedApplications(userId: $userId)
+  }
+`;
+
+export const GET_ALL_APPLICATIONS = gql`
+  query getAllApplications($userId: String!) {
+    getAllApplications(userId: $userId)
+  }
+`;
+
+export const GET_LATEST_APPLICATIONS = gql`
+  query getLatestApplications($userId: String!) {
+    getLatestApplications(userId: $userId)
+  }
+`;
