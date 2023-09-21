@@ -28,6 +28,7 @@ export const FilteringTable = () => {
       },
     }
   );
+
   //Assign Data
   var newData = [];
   if (userApplications) {
@@ -108,7 +109,7 @@ export const FilteringTable = () => {
                         <button
                           className="btn btn-primary btn-sm sw-btn-next ms-1"
                           onClick={() =>
-                            alert("Can.t upload to pending results!")
+                            alert("Can not upload to declined results!")
                           }>
                           Docs
                         </button>

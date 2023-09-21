@@ -12,7 +12,7 @@ export const GET_APPLICATIONS = gql`
       address
       postalCode
       country
-      municipalAcc
+      municipality
       race
       houseHoldHead
       maritalStatus
