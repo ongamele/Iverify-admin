@@ -19,7 +19,7 @@ export const CREATE_APPLICATION = gql`
     $affidavid: String
     $gender: String!
     $companyName: String
-    $companyPhoneNumber: String
+    $companyPhoneNumber: Int
     $companyEmail: String
     $income: Int
     $sourceOfIncome: String

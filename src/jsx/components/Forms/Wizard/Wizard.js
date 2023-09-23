@@ -1,5 +1,11 @@
 import React, { Fragment, useState, useContext } from "react";
-//import Multistep from "react-multistep";
+import axios from "axios";
+
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Toast from "react-bootstrap/Toast";
+import Button from "react-bootstrap/Button";
+
 import { Stepper, Step } from "react-form-stepper";
 
 import StepOne from "./StepOne";
@@ -10,12 +16,12 @@ import PageTitle from "../../../layouts/PageTitle";
 
 import { useMutation } from "@apollo/react-hooks";
 import { CREATE_APPLICATION } from "../../../../Graphql/Mutations.jsx";
-import { Alert } from "react-bootstrap";
 import { AuthContext } from "../../context-auth/auth";
 
 const Wizard = () => {
   const { user } = useContext(AuthContext);
   const userId = user.id;
+  const [toastShow, setToastShow] = useState(false);
   const [goSteps, setGoSteps] = useState(0);
   const [email, setEmail] = useState("");
   //const [userId, setUserId] = useState("2343934932");
@@ -110,13 +116,12 @@ const Wizard = () => {
     setOtp(data.otp);
   };
 
-  const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const [createApplication, { loading }] = useMutation(CREATE_APPLICATION, {
     update(_, result) {
       if (result) {
-        alert("Application Is Submitted!");
+        setToastShow(true);
         // setGoSteps(1);
       }
     },
@@ -189,7 +194,7 @@ const Wizard = () => {
             applicantIdNumber,
             applicantName,
             applicantSurname,
-            applicantPhoneNumber,
+            applicantPhoneNumber: parseInt(applicantPhoneNumber),
             applicantRelationship,
             spauseIdNumber,
             spauseName,
@@ -215,96 +220,151 @@ const Wizard = () => {
     }
   }
 
-  return (
-    <Fragment>
-      <PageTitle activeMenu="Application" motherMenu="New" />
+  const sendSMS = async () => {
+    try {
+      const apiKey =
+        "2319f2b218dfee20edf691f73ccba12f-73d582c6-316c-4b53-a90c-1c0c1fa1c94f";
+      const phoneNumber = "27785158724";
+      const message = "Hello Iverify";
 
-      <div className="row">
-        <div className="col-xl-12 col-xxl-12">
-          <div className="card">
-            <div className="card-header">
-              <h4 className="card-title">Application Form</h4>
-            </div>
-            <div className="card-body">
-              <div className="form-wizard ">
-                <Stepper
-                  className="nav-wizard"
-                  activeStep={goSteps}
-                  label={false}>
-                  <Step className="nav-link" onClick={() => setGoSteps(0)} />
-                  <Step className="nav-link" onClick={() => setGoSteps(1)} />
-                  <Step className="nav-link" onClick={() => setGoSteps(2)} />
-                  <Step className="nav-link" onClick={() => setGoSteps(3)} />
-                </Stepper>
-                {goSteps === 0 && (
-                  <>
-                    <StepOne sendDataToParent={receiveDataFromChild} />
-                    <div className="text-end toolbar toolbar-bottom p-2">
-                      <button
-                        className="btn btn-primary sw-btn-next"
-                        onClick={() => setGoSteps(1)}>
-                        Next
-                      </button>
-                    </div>
-                  </>
-                )}
-                {goSteps === 1 && (
-                  <>
-                    <StepTwo sendDataToParent={receiveDataFromStep2Child} />
-                    <div className="text-end toolbar toolbar-bottom p-2">
-                      <button
-                        className="btn btn-secondary sw-btn-prev me-1"
-                        onClick={() => setGoSteps(0)}>
-                        Prev
-                      </button>
-                      <button
-                        className="btn btn-primary sw-btn-next ms-1"
-                        onClick={() => setGoSteps(2)}>
-                        Next
-                      </button>
-                    </div>
-                  </>
-                )}
-                {goSteps === 2 && (
-                  <>
-                    <StepThree sendDataToParent={receiveDataFromStep3Child} />
-                    <div className="text-end toolbar toolbar-bottom p-2">
-                      <button
-                        className="btn btn-secondary sw-btn-prev me-1"
-                        onClick={() => setGoSteps(1)}>
-                        Prev
-                      </button>
-                      <button
-                        className="btn btn-primary sw-btn-next ms-1"
-                        onClick={() => setGoSteps(3)}>
-                        Next
-                      </button>
-                    </div>
-                  </>
-                )}
-                {goSteps === 3 && (
-                  <>
-                    <StepFour />
-                    <div className="text-end toolbar toolbar-bottom p-2">
-                      <button
-                        className="btn btn-secondary sw-btn-prev me-1"
-                        onClick={() => setGoSteps(2)}>
-                        Prev
-                      </button>
-                      <button
-                        className="btn btn-primary sw-btn-next ms-1"
-                        onClick={() => submitFunction()}>
-                        Submit
-                      </button>
-                    </div>
-                  </>
-                )}
+      const response = await axios.post(
+        "https://api.infobip.com/sms/1/text/single",
+        {
+          from: "447860099299",
+          to: phoneNumber,
+          text: message,
+        },
+        {
+          headers: {
+            Authorization: `App ${apiKey}`,
+          },
+        }
+      );
+
+      console.log("SMS sent successfully:", response.data);
+    } catch (error) {
+      console.error("Error sending SMS:", error);
+    }
+  };
+
+  const handleSendSMS = () => {
+    sendSMS();
+  };
+
+  //setGoSteps(1)
+  return (
+    <>
+      <Row>
+        <Col xs={6}>
+          <Toast
+            onClose={() => setToastShow(false)}
+            show={toastShow}
+            delay={3000}
+            autohide>
+            <Toast.Header>
+              <img
+                src="holder.js/20x20?text=%20"
+                className="rounded me-2"
+                alt=""
+              />
+              <strong className="me-auto">IVERIFY</strong>
+            </Toast.Header>
+            <Toast.Body>
+              Your application has been successfully submitted!
+            </Toast.Body>
+          </Toast>
+        </Col>
+      </Row>
+      <Fragment>
+        <PageTitle activeMenu="Application" motherMenu="New" />
+
+        <div className="row">
+          <div className="col-xl-12 col-xxl-12">
+            <div className="card">
+              <div className="card-header">
+                <h4 className="card-title">Application Form</h4>
+              </div>
+              <div className="card-body">
+                <div className="form-wizard ">
+                  <Stepper
+                    className="nav-wizard"
+                    activeStep={goSteps}
+                    label={false}>
+                    <Step className="nav-link" onClick={() => setGoSteps(0)} />
+                    <Step className="nav-link" onClick={() => setGoSteps(1)} />
+                    <Step className="nav-link" onClick={() => setGoSteps(2)} />
+                    <Step className="nav-link" onClick={() => setGoSteps(3)} />
+                  </Stepper>
+                  {goSteps === 0 && (
+                    <>
+                      <StepOne sendDataToParent={receiveDataFromChild} />
+                      <div className="text-end toolbar toolbar-bottom p-2">
+                        <button
+                          className="btn btn-primary sw-btn-next"
+                          onClick={() => setGoSteps(1)}>
+                          Next
+                        </button>
+                      </div>
+                    </>
+                  )}
+                  {goSteps === 1 && (
+                    <>
+                      <StepTwo sendDataToParent={receiveDataFromStep2Child} />
+                      <div className="text-end toolbar toolbar-bottom p-2">
+                        <button
+                          className="btn btn-secondary sw-btn-prev me-1"
+                          onClick={() => setGoSteps(0)}>
+                          Prev
+                        </button>
+                        <button
+                          className="btn btn-primary sw-btn-next ms-1"
+                          onClick={() => setGoSteps(2)}>
+                          Next
+                        </button>
+                      </div>
+                    </>
+                  )}
+                  {goSteps === 2 && (
+                    <>
+                      <StepThree sendDataToParent={receiveDataFromStep3Child} />
+                      <div className="text-end toolbar toolbar-bottom p-2">
+                        <button
+                          className="btn btn-secondary sw-btn-prev me-1"
+                          onClick={() => setGoSteps(1)}>
+                          Prev
+                        </button>
+                        <button
+                          className="btn btn-primary sw-btn-next ms-1"
+                          onClick={() => setGoSteps(3)}>
+                          Next
+                        </button>
+                      </div>
+                    </>
+                  )}
+                  {goSteps === 3 && (
+                    <>
+                      <StepFour />
+                      <div className="text-end toolbar toolbar-bottom p-2">
+                        <button
+                          className="btn btn-secondary sw-btn-prev me-1"
+                          onClick={() => setGoSteps(2)}>
+                          Prev
+                        </button>
+                        <button
+                          className="btn btn-primary sw-btn-next ms-1"
+                          onClick={() => submitFunction()}>
+                          Submit
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </Fragment>
+      </Fragment>
+    </>
   );
 };
 

@@ -160,7 +160,7 @@ const StepThree = ({ sendDataToParent }) => {
             <input
               type="text"
               className="form-control"
-              id="emial1"
+              id="inputGroupPrepend2"
               placeholder="8358474832227"
               required
               onChange={(e) => setApplicantIdNumber(e.target.value)}
@@ -228,52 +228,6 @@ const StepThree = ({ sendDataToParent }) => {
     </section>
   );
 
-  const Source1 = () => (
-    <section>
-      <div className="row">
-        <div className="col-lg-6 mb-2">
-          <div className="form-group mb-3">
-            <label className="text-label">Company Name*</label>
-            <input
-              type="text"
-              name="firstName"
-              className="form-control"
-              placeholder="Iverify"
-              required
-              onChange={(e) => setCompanyName(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="col-lg-6 mb-2">
-          <div className="form-group mb-3">
-            <label className="text-label">Company Email Address*</label>
-            <input
-              type="email"
-              className="form-control"
-              id="emial1"
-              placeholder="example@example.com"
-              required
-              onChange={(e) => setCompanyEmail(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="col-lg-6 mb-2">
-          <div className="form-group mb-3">
-            <label className="text-label">Company Phone Number*</label>
-            <input
-              type="number"
-              name="phoneNumber"
-              className="form-control"
-              placeholder="(+27)11 8-657-907"
-              required
-              onChange={(e) => setCompanyPhoneNumber(e.target.value)}
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-
   return (
     <section>
       <div className="row">
@@ -303,7 +257,82 @@ const StepThree = ({ sendDataToParent }) => {
             </select>
           </div>
         </div>
-        {householdHead === "No" && <ApplicantDetails />}
+        {householdHead === "No" && (
+          <section>
+            <div className="row">
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Applicant ID Number*</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="inputGroupPrepend2"
+                    placeholder="8358474832227"
+                    required
+                    onChange={(e) => setApplicantIdNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Applicant Name*</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="emial1"
+                    placeholder="Naomi"
+                    required
+                    onChange={(e) => setApplicantName(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Applicant Surname*</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="emial1"
+                    placeholder="Rampele"
+                    required
+                    onChange={(e) => setApplicantSurname(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Applicant Cell Number*</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="emial1"
+                    placeholder="083 465 7484"
+                    required
+                    onChange={(e) => setApplicantPhoneNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Relationship*</label>
+                  <select
+                    defaultValue={"option"}
+                    onChange={(e) => setApplicantRelationship(e.target.value)}
+                    className="form-control form-control-md">
+                    <option></option>
+                    <option vlaue="Child">Child</option>
+                    <option value="Sibling">Sibling</option>
+                    <option value="Spause">Spause</option>
+                    <option value="Relative">Relative</option>
+                    <option value="Parent">Parent</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
         <div className="col-lg-6 mb-2">
           <div className="form-group mb-3">
             <label className="text-label">Household Dependants*</label>
@@ -317,7 +346,25 @@ const StepThree = ({ sendDataToParent }) => {
             </select>
           </div>
         </div>
-        {dependent === "Yes" && <Ages />}
+        {dependent === "Yes" && (
+          <section>
+            <div className="row">
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Dependents Age range*</label>
+                  <input
+                    type="text"
+                    name="AgeRange"
+                    className="form-control"
+                    placeholder="4 - 12"
+                    required
+                    onChange={(e) => setAgeRange(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
         <div className="col-lg-6 mb-2">
           <div className="form-group mb-3">
             <label className="text-label">Income*</label>
@@ -346,9 +393,128 @@ const StepThree = ({ sendDataToParent }) => {
             </select>
           </div>
         </div>
-        {sourceOfIncome === "Employed" && <Source1 />}
-        {sourceOfIncome === "Self Employed" && <Source2 />}
-        {sourceOfIncome === "Sassa Beneficiary" && <Source3 />}
+        {sourceOfIncome === "Employed" && (
+          <section>
+            <div className="row">
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Company Name*</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    className="form-control"
+                    placeholder="Iverify"
+                    required
+                    onChange={(e) => setCompanyName(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Company Email Address*</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="emial1"
+                    placeholder="example@example.com"
+                    required
+                    onChange={(e) => setCompanyEmail(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Company Phone Number*</label>
+                  <input
+                    type="number"
+                    name="phoneNumber"
+                    className="form-control"
+                    placeholder="(+27)11 8-657-907"
+                    required
+                    onChange={(e) => setCompanyPhoneNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+        {sourceOfIncome === "Self Employed" && (
+          <section>
+            <div className="row">
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Company Name*</label>
+                  <input
+                    type="text"
+                    name="Transnet"
+                    className="form-control"
+                    placeholder="Iverify"
+                    required
+                    onChange={(e) => setCompanyName(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Registration Number*</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="emial1"
+                    placeholder="E2021GFJKD"
+                    required
+                    onChange={(e) => setCompanyRegNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Type Of Business*</label>
+                  <input
+                    type="text"
+                    name="phoneNumber"
+                    className="form-control"
+                    placeholder="Retail"
+                    required
+                    onChange={(e) => setCompanyType(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Company Phone Number*</label>
+                  <input
+                    type="number"
+                    name="phoneNumber"
+                    className="form-control"
+                    placeholder="(+27)11 8-657-907"
+                    required
+                    onChange={(e) => setCompanyPhoneNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+        {sourceOfIncome === "Sassa Beneficiary" && (
+          <section>
+            <div className="row">
+              <div className="col-lg-6 mb-2">
+                <div className="form-group mb-3">
+                  <label className="text-label">Sassa Number*</label>
+                  <input
+                    type="text"
+                    name="sassaNumber"
+                    className="form-control"
+                    placeholder="3544563"
+                    required
+                    onChange={(e) => setSassaNumber(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
         <div className="col-lg-6 mb-2">
           <div className="form-group mb-3">
             <label className="text-label">Marital Satus*</label>

@@ -37,6 +37,17 @@ const StepOne = ({ sendDataToParent }) => {
   };
   sendDataToParent(data);
 
+  const consentListStyle = {
+    textAlign: "center",
+    listStyleType: "disc",
+    paddingLeft: "0px",
+  };
+
+  const consentItemStyle = {
+    textAlign: "left",
+    marginBottom: "10px",
+  };
+
   return (
     <section>
       <div className="row" style={{ marginBottom: 10 }}>
@@ -44,15 +55,28 @@ const StepOne = ({ sendDataToParent }) => {
           <h4>Consent *</h4>
         </div>
         <div className="col-6 col-sm-6 mb-2">
-          <h4>
-            I consent to and accept that Vhembe District Municipality will use a
-            third party (i.e. Credit Bureau) to conduct verification and access
-            my personal credit information to assess my indigent status. I give
-            consent to Vhembe District Municipality to utilise my personal
-            information for Indigent verification analysis and other activities
-            such as economic and financial and feasibility studies. Click on
-            next to consent.
-          </h4>
+          <div>
+            <ul style={consentListStyle}>
+              <li style={consentItemStyle}>
+                I consent to and accept that Vhembe District Municipality may
+                use a third party (i.e. Credit Bureaus) to conduct verification
+                and access my personal credit information to verify my indigent
+                status.
+              </li>
+              <li style={consentItemStyle}>
+                I give consent to Vhembe District Municipality to utilize my
+                personal information for Indigent verification analysis and
+                other activities such as economic and financial feasibility
+                studies.
+              </li>
+              <li style={consentItemStyle}>
+                Further, it is specifically agreed that the service provider
+                will use its best endeavors and take all reasonable precautions
+                to ensure that any information provided is only used for the
+                purposes it has been provided.
+              </li>
+            </ul>
+          </div>
           <label className="text-label">Accept to continue</label>
           <select
             defaultValue={"option"}
@@ -200,7 +224,7 @@ const StepOne = ({ sendDataToParent }) => {
                   className="form-control"
                   id="inputGroupPrepend2"
                   aria-describedby="inputGroupPrepend2"
-                  placeholder="South Africa"
+                  placeholder="13"
                   required
                   onChange={(e) => setWardNumber(e.target.value)}
                 />

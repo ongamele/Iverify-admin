@@ -32,6 +32,17 @@ const StepFour = () => {
     }
   };
 
+  const consentListStyle = {
+    textAlign: "center",
+    listStyleType: "disc", // Add bullet points
+    paddingLeft: "0px", // Add some space for the bullet points
+  };
+
+  const consentItemStyle = {
+    textAlign: "left", // Align text within list items to the left
+    marginBottom: "10px", // Add space after each item
+  };
+
   return (
     <section>
       <div className="row">
@@ -39,14 +50,20 @@ const StepFour = () => {
           <h4>Declaration *</h4>
         </div>
         <div className="col-6 col-sm-6 mb-2">
-          <h4>
-            • I declare that the information provided in this application for
-            indigent verification, is to the best of my knowledge and its true
-            and correct. <br />• I accept that should it be found that this
-            application contains fraudulent information, the benefits will be
-            suspended, and I cannot apply for indigent status, until the next
-            financial year.
-          </h4>
+          <div>
+            <ul style={consentListStyle}>
+              <li style={consentItemStyle}>
+                I declare that the information provided in this application for
+                indigent verification is to the best of my knowledge and it’s
+                true and correct.
+              </li>
+              <li style={consentItemStyle}>
+                I accept that should this application contain fraudulent
+                information, the benefits will be suspended, and I cannot apply
+                for indigent status, until the next financial year.
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       {/*<div className="row emial-setup">

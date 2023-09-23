@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from "react";
+import React, { useMemo, useContext, useState } from "react";
 
 import { useQuery } from "@apollo/react-hooks";
 import PageTitle from "../../../layouts/PageTitle";
@@ -8,7 +8,7 @@ import {
   useFilters,
   usePagination,
 } from "react-table";
-import MOCK_DATA from "./MOCK_DATA_2.json";
+import Modal from "react-bootstrap/Modal";
 import { COLUMNS } from "./Columns";
 import { GlobalFilter } from "./GlobalFilter";
 //import './table.css';
@@ -17,6 +17,8 @@ import { AuthContext } from "../../context-auth/auth";
 import { GET_APPLICATIONS } from "../../../../Graphql/Queries";
 
 export const FilteringTable = () => {
+  const [show, setShow] = useState(false);
+  const [status, setStatus] = useState("");
   const { user } = useContext(AuthContext);
 
   const { loading: userLoading, data: userApplications } = useQuery(
@@ -67,8 +69,71 @@ export const FilteringTable = () => {
 
   const { globalFilter, pageIndex } = state;
 
+  function handleButtonClick(row) {
+    const rowData = row.original;
+    if (rowData.status == "Declined") {
+      setShow(true);
+    } else {
+      alert("Can not upload document because the application was declined!");
+    }
+  }
+
   return (
     <>
+      <Modal show={show} fullscreen={true} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Upload Documents</Modal.Title>
+        </Modal.Header>
+        <section className="upload-section">
+          <div className="row emial-setup">
+            <div className="col-lg-3 col-sm-6 col-6">
+              <div className="form-group mb-3">
+                <label
+                  htmlFor="mailclient14"
+                  className="mailclinet mailclinet-another">
+                  <input
+                    type="radio"
+                    className="redio-false"
+                    name="emailclient"
+                    id="mailclient14"
+                  />
+                  <span className="mail-icon">
+                    <i
+                      className="mdi mdi-account-box-outline"
+                      aria-hidden="true"></i>
+                  </span>
+                  <span className="mail-text">ID</span>
+                </label>
+              </div>
+            </div>
+            <div className="col-lg-3 col-sm-6 col-6">
+              <div className="form-group mb-3">
+                <label
+                  htmlFor="mailclient13"
+                  className="mailclinet mailclinet-drive">
+                  <input
+                    type="radio"
+                    className="redio-false"
+                    name="emailclient"
+                    id="mailclient13"
+                  />
+                  <span className="mail-icon">
+                    <i className="mdi mdi-content-copy" aria-hidden="true"></i>
+                  </span>
+                  <span className="mail-text">Proof Of Address</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div className="upload-div">
+          <button
+            className="btn btn-primary btn-sm sw-btn-next ms-1 upload-button"
+            onClick={() => console.log("No document")}>
+            Upload Documents
+          </button>
+        </div>
+      </Modal>
       <PageTitle activeMenu="Applications" motherMenu="Latest" />
       <div className="card">
         <div className="card-header">
@@ -97,20 +162,16 @@ export const FilteringTable = () => {
                     <tr {...row.getRowProps()}>
                       {row.cells.map((cell) => {
                         return (
-                          <>
-                            <td {...cell.getCellProps()}>
-                              {" "}
-                              {cell.render("Cell")}{" "}
-                            </td>
-                          </>
+                          <td {...cell.getCellProps()}>
+                            {" "}
+                            {cell.render("Cell")}{" "}
+                          </td>
                         );
                       })}
                       <td>
                         <button
                           className="btn btn-primary btn-sm sw-btn-next ms-1"
-                          onClick={() =>
-                            alert("Can not upload to declined results!")
-                          }>
+                          onClick={() => handleButtonClick(row)}>
                           Docs
                         </button>
                       </td>
