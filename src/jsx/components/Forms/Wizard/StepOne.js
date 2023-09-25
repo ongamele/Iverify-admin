@@ -260,13 +260,36 @@ const StepOne = ({ sendDataToParent }) => {
             <div className="col-lg-12 mb-2">
               <div className="form-group mb-3">
                 <label className="text-label">Municipality*</label>
-                <input
-                  type="text"
-                  name="place"
-                  className="form-control"
-                  required
+                <select
+                  defaultValue={"option"}
                   onChange={(e) => setMunicipality(e.target.value)}
-                />
+                  className="form-control form-control-md">
+                  <option></option>
+                  <option vlaue="Buffalo City Metropolitan">
+                    Buffalo City Metropolitan
+                  </option>
+                  <option value="City of Cape Town Metropolitan">
+                    City of Cape Town Metropolitan
+                  </option>
+                  <option value="City of Ekurhuleni Metropolitan">
+                    City of Ekurhuleni Metropolitan
+                  </option>
+                  <option value="City of Johannesburg Metropolitan">
+                    City of Johannesburg Metropolitan
+                  </option>
+                  <option value="City of Tshwane Metropolitan">
+                    City of Tshwane Metropolitan
+                  </option>
+                  <option value="eThekwini Metropolitan">
+                    eThekwini Metropolitan
+                  </option>
+                  <option value="Mangaung Metropolitan">
+                    Mangaung Metropolitan
+                  </option>
+                  <option value="Nelson Mandela Bay Metropolitan">
+                    Nelson Mandela Bay Metropolitan
+                  </option>
+                </select>
               </div>
             </div>
           </div>
