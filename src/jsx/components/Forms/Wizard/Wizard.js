@@ -77,6 +77,8 @@ const Wizard = () => {
 
   const [redirecting, setRedirecting] = useState(false);
 
+  const [applicationResults, setApplicationResults] = useState("");
+
   const receiveDataFromChild = (data) => {
     setEmail(data.email);
     setGender(data.gender);
@@ -130,6 +132,7 @@ const Wizard = () => {
   const [createApplication, { loading }] = useMutation(CREATE_APPLICATION, {
     update(_, result) {
       if (result) {
+        setApplicationResults(result.data.createApplication);
         setMessage(result);
         setToastShow(true);
 
@@ -305,9 +308,7 @@ const Wizard = () => {
               />
               <strong className="me-auto">IVERIFY</strong>
             </Toast.Header>
-            <Toast.Body>
-              Your application has been successfully submitted!
-            </Toast.Body>
+            <Toast.Body>{applicationResults}!</Toast.Body>
           </Toast>
         </Col>
       </Row>

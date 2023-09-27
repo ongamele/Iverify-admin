@@ -82,22 +82,7 @@ export const CREATE_APPLICATION = gql`
         sassaNumber: $sassaNumber
         ageRange: $ageRange
       }
-    ) {
-      userId
-      name
-      surname
-      phoneNumber
-      address
-      postalCode
-      country
-      race
-      houseHoldHead
-      maritalStatus
-      dependents
-      bankStatement
-      idBook
-      affidavid
-    }
+    )
   }
 `;
 

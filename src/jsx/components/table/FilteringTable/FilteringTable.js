@@ -24,7 +24,6 @@ export const FilteringTable = () => {
   const { loading: userLoading, data: userApplications } = useQuery(
     GET_APPLICATIONS,
     {
-      pollInterval: 4000,
       variables: {
         userId: user.id,
       },
