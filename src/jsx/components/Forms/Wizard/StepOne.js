@@ -15,6 +15,7 @@ const StepOne = ({ sendDataToParent }) => {
   const [suburb, setSuburb] = useState("");
   const [wardNumber, setWardNumber] = useState("");
   const [municipality, setMunicipality] = useState("");
+  const [idNumberCount, setIdnumberCount] = useState(0);
 
   //Consent
   const [isConsent, setIsConsent] = useState(false);
@@ -34,6 +35,8 @@ const StepOne = ({ sendDataToParent }) => {
     suburb,
     wardNumber,
     municipality,
+    idNumberCount,
+    isConsent,
   };
   sendDataToParent(data);
 
@@ -46,6 +49,15 @@ const StepOne = ({ sendDataToParent }) => {
   const consentItemStyle = {
     textAlign: "left",
     marginBottom: "10px",
+  };
+
+  const handleIdNumberChange = (e) => {
+    const input = e.target.value;
+    // Remove any non-numeric characters
+    const numericInput = input.replace(/[^0-9]/g, "");
+
+    setIdNumber(numericInput);
+    setIdnumberCount(numericInput.length);
   };
 
   return (
@@ -167,7 +179,7 @@ const StepOne = ({ sendDataToParent }) => {
                   className="form-control"
                   placeholder="9109182848484"
                   required
-                  onChange={(e) => setIdNumber(e.target.value)}
+                  onChange={handleIdNumberChange}
                 />
               </div>
             </div>

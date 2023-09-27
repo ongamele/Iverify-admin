@@ -11,6 +11,7 @@ export const CREATE_APPLICATION = gql`
     $postalCode: String
     $country: String!
     $race: String!
+    $idNumber: String!
     $houseHoldHead: Boolean
     $maritalStatus: String
     $dependents: Boolean
@@ -51,6 +52,7 @@ export const CREATE_APPLICATION = gql`
         postalCode: $postalCode
         country: $country
         race: $race
+        idNumber: $idNumber
         houseHoldHead: $houseHoldHead
         maritalStatus: $maritalStatus
         dependents: $dependents

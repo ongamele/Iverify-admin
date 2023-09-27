@@ -1,10 +1,10 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useState, useContext, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Toast from "react-bootstrap/Toast";
-import Button from "react-bootstrap/Button";
 
 import { Stepper, Step } from "react-form-stepper";
 
@@ -19,6 +19,7 @@ import { CREATE_APPLICATION } from "../../../../Graphql/Mutations.jsx";
 import { AuthContext } from "../../context-auth/auth";
 
 const Wizard = () => {
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const userId = user.id;
   const [toastShow, setToastShow] = useState(false);
@@ -30,9 +31,11 @@ const Wizard = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [gender, setGender] = useState("");
   const [idNumber, setIdNumber] = useState("");
+  const [idNumberCount, setIdnumberCount] = useState();
   const [country, setCountry] = useState("");
   const [race, setRace] = useState("");
   const [address, setAddress] = useState("");
+  const [isConsent, setIsConsent] = useState(false);
 
   const [idBook, setIdBook] = useState("");
   const [affidavid, setAffidavid] = useState("");
@@ -45,6 +48,7 @@ const Wizard = () => {
 
   //Step Two
   const [otp, setOtp] = useState();
+  const [sentOtp, setSentOtp] = useState();
 
   //Step three
   const [income, setIncome] = useState();
@@ -71,6 +75,8 @@ const Wizard = () => {
   const [sassaNumber, setSassaNumber] = useState("");
   const [ageRange, setAgeRange] = useState("");
 
+  const [redirecting, setRedirecting] = useState(false);
+
   const receiveDataFromChild = (data) => {
     setEmail(data.email);
     setGender(data.gender);
@@ -79,6 +85,7 @@ const Wizard = () => {
     setPhoneNumber(data.phoneNumber);
     setGender(data.gender);
     setIdNumber(data.idNumber);
+    setIdnumberCount(data.idNumberCount);
     setCountry(data.country);
     setRace(data.race);
     setAddress(data.address);
@@ -86,6 +93,7 @@ const Wizard = () => {
     setSuburb(data.suburb);
     setWardNumber(data.wardNumber);
     setMunicipality(data.municipality);
+    setIsConsent(data.isConsent);
   };
 
   const receiveDataFromStep3Child = (data) => {
@@ -117,12 +125,22 @@ const Wizard = () => {
   };
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
 
   const [createApplication, { loading }] = useMutation(CREATE_APPLICATION, {
     update(_, result) {
       if (result) {
+        setMessage(result);
         setToastShow(true);
-        // setGoSteps(1);
+
+        const redirectToPage = () => {
+          setTimeout(() => {
+            setRedirecting(true);
+            navigate("/table-filtering");
+          }, 3000);
+        };
+
+        redirectToPage();
       }
     },
     onError(err) {
@@ -222,16 +240,19 @@ const Wizard = () => {
 
   const sendSMS = async () => {
     try {
+      const min = 10000; // Minimum 5-digit number
+      const max = 99999; // Maximum 5-digit number
+      const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+      setSentOtp(randomNum);
       const apiKey =
         "2319f2b218dfee20edf691f73ccba12f-73d582c6-316c-4b53-a90c-1c0c1fa1c94f";
-      const phoneNumber = "27785158724";
-      const message = "Hello Iverify";
+      const message = `Hello, Your Iverify OTP is ${randomNum}`;
 
       const response = await axios.post(
         "https://api.infobip.com/sms/1/text/single",
         {
-          from: "447860099299",
-          to: phoneNumber,
+          from: "27872406515",
+          to: "27" + phoneNumber.toString(),
           text: message,
         },
         {
@@ -247,8 +268,23 @@ const Wizard = () => {
     }
   };
 
-  const handleSendSMS = () => {
-    sendSMS();
+  const handleStepOne = () => {
+    if (idNumberCount == 13 && isConsent) {
+      sendSMS();
+      setGoSteps(1);
+    } else {
+      alert(
+        "Please ensure that you enter 13 digit ID and consent to our terms to continue!"
+      );
+    }
+  };
+
+  const handleStepTwo = () => {
+    if (sentOtp == otp) {
+      setGoSteps(2);
+    } else {
+      alert("Incorrect OTP. Please check your OTP or restart the form!");
+    }
   };
 
   //setGoSteps(1)
@@ -301,7 +337,7 @@ const Wizard = () => {
                       <div className="text-end toolbar toolbar-bottom p-2">
                         <button
                           className="btn btn-primary sw-btn-next"
-                          onClick={() => setGoSteps(1)}>
+                          onClick={() => handleStepOne()}>
                           Next
                         </button>
                       </div>
@@ -318,7 +354,7 @@ const Wizard = () => {
                         </button>
                         <button
                           className="btn btn-primary sw-btn-next ms-1"
-                          onClick={() => setGoSteps(2)}>
+                          onClick={() => handleStepTwo()}>
                           Next
                         </button>
                       </div>
