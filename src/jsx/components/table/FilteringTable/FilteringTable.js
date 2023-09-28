@@ -1,7 +1,9 @@
 import React, { useMemo, useContext, useState, useEffect } from "react";
 
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import PageTitle from "../../../layouts/PageTitle";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import {
   useTable,
   useGlobalFilter,
@@ -15,9 +17,11 @@ import { GlobalFilter } from "./GlobalFilter";
 import "./filtering.css";
 import { AuthContext } from "../../context-auth/auth";
 import { GET_APPLICATIONS } from "../../../../Graphql/Queries";
+import { GET_SELECTED_APPLICATION } from "../../../../Graphql/Mutations";
 
 export const FilteringTable = () => {
   const [show, setShow] = useState(false);
+  const [id, setId] = useState("");
   const { user } = useContext(AuthContext);
 
   const {
@@ -29,6 +33,98 @@ export const FilteringTable = () => {
       userId: user.id,
     },
   });
+
+  const [getSelectedApplication, { loading }] = useMutation(
+    GET_SELECTED_APPLICATION,
+    {
+      update(_, result) {
+        var rowsData = [];
+
+        rowsData.push({
+          name: result.data.getSelectedApplication.name,
+          surname: result.data.getSelectedApplication.surname,
+          idNumber: result.data.getSelectedApplication.idNumber,
+          status: result.data.getSelectedApplication.status,
+          reason: result.data.getSelectedApplication.reason,
+        });
+        let left = 15;
+        let top = 8;
+        const imgWidth = 30;
+        const imgHeight = 30;
+
+        const doc = new jsPDF();
+        var img = new Image();
+        img.src = require("../../../../images/logo-full.png");
+        doc.addImage(img, "png", left, top, imgWidth, imgHeight);
+        doc.setFont(undefined, "bold");
+        doc.text("Application Report", 80, 44);
+
+        doc.setFontSize(10);
+        doc.setFont(undefined, "bold");
+        doc
+          .text("CANDIDATE PERSONAL INFORMATION", 15, 60)
+          .setFont(undefined, "bold");
+        doc.autoTable({
+          startY: 70,
+          startX: 10,
+          headStyles: { fillColor: [143, 34, 13] },
+          columns: [
+            { dataKey: "name", header: "Name" },
+            { dataKey: "surname", header: "Surname" },
+            { dataKey: "idNumber", header: "Id Number" },
+            { dataKey: "status", header: "Status" },
+            { dataKey: "reason", header: "Reason" },
+          ],
+          body: rowsData,
+        });
+
+        doc.save("report.pdf");
+      },
+      onError(err) {
+        alert("Application Not Found! " + err);
+      },
+
+      variables: {
+        id,
+      },
+    }
+  );
+
+  function downloadPdf(id) {
+    /* let left = 15;
+    let top = 8;
+    const imgWidth = 30;
+    const imgHeight = 30;
+
+    const doc = new jsPDF();
+    var img = new Image();
+    img.src = require("../../../../images/logo-full.png");
+    doc.addImage(img, "png", left, top, imgWidth, imgHeight);
+    doc.setFont(undefined, "bold");
+    doc.text("Application Report", 80, 44);
+
+    doc.setFontSize(10);
+    doc.setFont(undefined, "bold");
+    doc
+      .text("PERSONAL INFORMATION OF CANDIDATE", 15, 50)
+      .setFont(undefined, "bold");
+    doc.autoTable({
+      startY: 129,
+      startX: 10,
+      headStyles: { fillColor: [143, 34, 13] },
+      columns: [
+        { dataKey: "firstName", header: "Name" },
+
+        { dataKey: "lastName", header: "Surname" },
+        { dataKey: "idNumber", header: "Id Number" },
+        { dataKey: "status", header: "Status" },
+        { dataKey: "reason", header: "Reason" },
+      ],
+      body: applicationData,
+    });
+
+    doc.save("report.pdf");*/
+  }
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -85,6 +181,14 @@ export const FilteringTable = () => {
       alert("Can not upload document because the application was declined!");
     }
   }
+
+  function handlePDFDownload(rowId) {
+    // getSelectedApplication();
+  }
+
+  useEffect(() => {
+    getSelectedApplication();
+  }, [id]);
 
   return (
     <>
@@ -207,6 +311,17 @@ export const FilteringTable = () => {
                           onClick={() => handleButtonClick(row)}>
                           Docs
                         </button>
+                      </td>
+                      <td>
+                        <i
+                          className="mdi mdi-download"
+                          aria-hidden="true"
+                          style={{
+                            color: "#DB3227",
+                            fontSize: 22,
+                            cursor: "pointer",
+                          }}
+                          onClick={() => setId(row.original.id)}></i>
                       </td>
                     </tr>
                   );

@@ -127,3 +127,31 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+export const GET_SELECTED_APPLICATION = gql`
+  mutation getSelectedApplication($id: String!) {
+    getSelectedApplication(id: $id) {
+      id
+      userId
+      name
+      surname
+      email
+      phoneNumber
+      idNumber
+      address
+      postalCode
+      country
+      municipality
+      race
+      houseHoldHead
+      maritalStatus
+      dependents
+      bankStatement
+      idBook
+      affidavid
+      status
+      reason
+      createdAt
+    }
+  }
+`;
