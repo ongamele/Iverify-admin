@@ -67,7 +67,7 @@ export const FilteringTable = () => {
         doc.autoTable({
           startY: 70,
           startX: 10,
-          headStyles: { fillColor: [143, 34, 13] },
+          headStyles: { fillColor: [219, 50, 39] },
           columns: [
             { dataKey: "name", header: "Name" },
             { dataKey: "surname", header: "Surname" },
