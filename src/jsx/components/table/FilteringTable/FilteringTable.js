@@ -81,7 +81,7 @@ export const FilteringTable = () => {
         doc.save("report.pdf");
       },
       onError(err) {
-        alert("Application Not Found! " + err);
+        console.lo("Application Not Found! " + err);
       },
 
       variables: {
