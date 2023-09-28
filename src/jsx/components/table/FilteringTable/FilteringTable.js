@@ -1,4 +1,4 @@
-import React, { useMemo, useContext, useState } from "react";
+import React, { useMemo, useContext, useState, useEffect } from "react";
 
 import { useQuery } from "@apollo/react-hooks";
 import PageTitle from "../../../layouts/PageTitle";
@@ -18,17 +18,26 @@ import { GET_APPLICATIONS } from "../../../../Graphql/Queries";
 
 export const FilteringTable = () => {
   const [show, setShow] = useState(false);
-  const [status, setStatus] = useState("");
   const { user } = useContext(AuthContext);
 
-  const { loading: userLoading, data: userApplications } = useQuery(
-    GET_APPLICATIONS,
-    {
-      variables: {
-        userId: user.id,
-      },
-    }
-  );
+  const {
+    loading: userLoading,
+    data: userApplications,
+    refetch,
+  } = useQuery(GET_APPLICATIONS, {
+    variables: {
+      userId: user.id,
+    },
+  });
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      refetch(); // Call the refetch function to execute the query again
+    }, 5000); // 5000 milliseconds = 5 seconds
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [refetch]);
 
   //Assign Data
   var newData = [];
@@ -91,7 +100,7 @@ export const FilteringTable = () => {
                   htmlFor="mailclient14"
                   className="mailclinet mailclinet-another">
                   <input
-                    type="radio"
+                    type="file"
                     className="redio-false"
                     name="emailclient"
                     id="mailclient14"
@@ -99,7 +108,8 @@ export const FilteringTable = () => {
                   <span className="mail-icon">
                     <i
                       className="mdi mdi-account-box-outline"
-                      aria-hidden="true"></i>
+                      aria-hidden="true"
+                      style={{ color: "#DB3227" }}></i>
                   </span>
                   <span className="mail-text">ID</span>
                 </label>
@@ -111,15 +121,39 @@ export const FilteringTable = () => {
                   htmlFor="mailclient13"
                   className="mailclinet mailclinet-drive">
                   <input
-                    type="radio"
+                    type="file"
                     className="redio-false"
                     name="emailclient"
                     id="mailclient13"
                   />
                   <span className="mail-icon">
-                    <i className="mdi mdi-content-copy" aria-hidden="true"></i>
+                    <i
+                      className="mdi mdi-content-copy"
+                      aria-hidden="true"
+                      style={{ color: "#DB3227" }}></i>
                   </span>
                   <span className="mail-text">Proof Of Address</span>
+                </label>
+              </div>
+            </div>
+            <div className="col-lg-3 col-sm-6 col-6">
+              <div className="form-group mb-3">
+                <label
+                  htmlFor="mailclient13"
+                  className="mailclinet mailclinet-drive">
+                  <input
+                    type="file"
+                    className="redio-false"
+                    name="emailclient"
+                    id="mailclient13"
+                  />
+                  <span className="mail-icon">
+                    <i
+                      className="mdi mdi-checkbox-multiple-blank-outline"
+                      aria-hidden="true"
+                      style={{ color: "#DB3227" }}></i>
+                  </span>
+                  <span className="mail-text">3 Months Bank Statement</span>
                 </label>
               </div>
             </div>
@@ -128,8 +162,8 @@ export const FilteringTable = () => {
         <div className="upload-div">
           <button
             className="btn btn-primary btn-sm sw-btn-next ms-1 upload-button"
-            onClick={() => console.log("No document")}>
-            Upload Documents
+            onClick={() => setShow(false)}>
+            Upload Documentss
           </button>
         </div>
       </Modal>

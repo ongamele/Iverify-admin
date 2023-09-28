@@ -9,6 +9,7 @@ export const GET_APPLICATIONS = gql`
       surname
       email
       phoneNumber
+      idNumber
       address
       postalCode
       country
@@ -21,6 +22,7 @@ export const GET_APPLICATIONS = gql`
       idBook
       affidavid
       status
+      reason
       createdAt
     }
   }
