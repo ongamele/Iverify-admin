@@ -27,7 +27,7 @@ class ApexRedialBar2 extends React.Component {
 
             track: {
               show: true,
-              background: "#e23428",
+              background: "#009BD7",
               strokeWidth: "10%",
               opacity: 1,
               margin: 18, // margin is in pixels
@@ -125,7 +125,7 @@ class ApexRedialBar2 extends React.Component {
           opacity: 1,
         },
 
-        colors: ["#e23428", "#e23428", "#e23428"],
+        colors: ["#009BD7", "#009BD7", "#009BD7"],
         labels: ["Ticket A", "Ticket B", "Ticket C"],
         legend: {
           fontSize: "14px",

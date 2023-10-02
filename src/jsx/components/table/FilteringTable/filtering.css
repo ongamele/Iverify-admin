@@ -41,10 +41,10 @@
   border-radius: 10px;
   display: inline-block;
   background-color: #fff;
-  color: #e23428;
+  color: #009bd7;
 }
 .filter-pagination button:hover {
-  background: #e23428;
+  background: #009bd7;
   color: #fff;
 }
 .filter-pagination button[disabled] {
@@ -52,7 +52,7 @@
   cursor: default;
 }
 .filter-pagination button[disabled]:hover {
-  background: #e23428;
+  background: #009bd7;
   opacity: 0.5;
   color: #fff;
 }

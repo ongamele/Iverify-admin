@@ -61,7 +61,7 @@ const Header = ({ onNote }) => {
                   variant=""
                   as="a"
                   className="nav-link i-false c-pointer">
-                  <i className="fas fa-user" style={{ color: "#E23428" }}></i>
+                  <i className="fas fa-user" style={{ color: "#009BD7" }}></i>
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                   align="right"

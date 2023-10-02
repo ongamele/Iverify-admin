@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useContext, useEffect } from "react";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -28,7 +29,7 @@ const Wizard = () => {
   //const [userId, setUserId] = useState("2343934932");
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+
   const [gender, setGender] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [idNumberCount, setIdnumberCount] = useState();
@@ -45,10 +46,13 @@ const Wizard = () => {
   const [suburb, setSuburb] = useState("");
   const [wardNumber, setWardNumber] = useState("");
   const [municipality, setMunicipality] = useState("");
+  const [municipalAccountNumber, setMunicipalAccountNumber] = useState("");
 
   //Step Two
   const [otp, setOtp] = useState();
   const [sentOtp, setSentOtp] = useState();
+
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   //Step three
   const [income, setIncome] = useState();
@@ -84,7 +88,7 @@ const Wizard = () => {
     setGender(data.gender);
     setName(data.name);
     setSurname(data.surname);
-    setPhoneNumber(data.phoneNumber);
+
     setGender(data.gender);
     setIdNumber(data.idNumber);
     setIdnumberCount(data.idNumberCount);
@@ -95,7 +99,7 @@ const Wizard = () => {
     setSuburb(data.suburb);
     setWardNumber(data.wardNumber);
     setMunicipality(data.municipality);
-    setIsConsent(data.isConsent);
+    setMunicipalAccountNumber(data.municipalAccountNumber);
   };
 
   const receiveDataFromStep3Child = (data) => {
@@ -123,7 +127,10 @@ const Wizard = () => {
   };
 
   const receiveDataFromStep2Child = (data) => {
+    setPhoneNumber(data.phoneNumber);
     setOtp(data.otp);
+    setSentOtp(data.sentOtp);
+    setIsConsent(data.isConsent);
   };
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -136,11 +143,39 @@ const Wizard = () => {
         setMessage(result);
         setToastShow(true);
 
+        const sendSMS = async () => {
+          try {
+            const apiKey =
+              "2319f2b218dfee20edf691f73ccba12f-73d582c6-316c-4b53-a90c-1c0c1fa1c94f";
+            const message = `Hello, Your Iverify OTP is ${result.data.createApplication}`;
+
+            const response = await axios.post(
+              "https://api.infobip.com/sms/1/text/single",
+              {
+                from: "27872406515",
+                to: "27" + phoneNumber.toString(),
+                text: message,
+              },
+              {
+                headers: {
+                  Authorization: `App ${apiKey}`,
+                },
+              }
+            );
+
+            console.log("SMS sent successfully:", response.data);
+          } catch (error) {
+            console.error("Error sending SMS:", error);
+          }
+        };
+
+        sendSMS();
+
         const redirectToPage = () => {
           setTimeout(() => {
             setRedirecting(true);
             navigate("/table-filtering");
-          }, 3000);
+          }, 10000);
         };
 
         redirectToPage();
@@ -210,6 +245,7 @@ const Wizard = () => {
             suburb,
             wardNumber,
             municipality,
+            municipalAccountNumber,
             companyRegNumber,
             companyType,
             applicantIdNumber,
@@ -241,53 +277,17 @@ const Wizard = () => {
     }
   }
 
-  const sendSMS = async () => {
-    try {
-      const min = 10000; // Minimum 5-digit number
-      const max = 99999; // Maximum 5-digit number
-      const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
-      setSentOtp(randomNum);
-      const apiKey =
-        "2319f2b218dfee20edf691f73ccba12f-73d582c6-316c-4b53-a90c-1c0c1fa1c94f";
-      const message = `Hello, Your Iverify OTP is ${randomNum}`;
-
-      const response = await axios.post(
-        "https://api.infobip.com/sms/1/text/single",
-        {
-          from: "27872406515",
-          to: "27" + phoneNumber.toString(),
-          text: message,
-        },
-        {
-          headers: {
-            Authorization: `App ${apiKey}`,
-          },
-        }
-      );
-
-      console.log("SMS sent successfully:", response.data);
-    } catch (error) {
-      console.error("Error sending SMS:", error);
-    }
-  };
-
   const handleStepOne = () => {
-    if (idNumberCount == 13 && isConsent) {
-      sendSMS();
-      setGoSteps(1);
-    } else {
-      alert(
-        "Please ensure that you enter 13 digit ID and consent to our terms to continue!"
-      );
-    }
-  };
-
-  const handleStepTwo = () => {
-    if (sentOtp == otp) {
-      setGoSteps(2);
-    } else {
-      alert("Incorrect OTP. Please check your OTP or restart the form!");
-    }
+    //if (isConsent && sentOtp == otp) {
+    setGoSteps(1);
+    /*} else {
+      if (!isConsent) {
+        alert(isConsent);
+      }
+      if (sentOtp !== otp) {
+        alert("Incorrect OTP. Please check your OTP or restart the form!");
+      }
+    }*/
   };
 
   //setGoSteps(1)
@@ -334,7 +334,7 @@ const Wizard = () => {
                   </Stepper>
                   {goSteps === 0 && (
                     <>
-                      <StepOne sendDataToParent={receiveDataFromChild} />
+                      <StepOne sendDataToParent={receiveDataFromStep2Child} />
                       <div className="text-end toolbar toolbar-bottom p-2">
                         <button
                           className="btn btn-primary sw-btn-next"
@@ -346,7 +346,7 @@ const Wizard = () => {
                   )}
                   {goSteps === 1 && (
                     <>
-                      <StepTwo sendDataToParent={receiveDataFromStep2Child} />
+                      <StepTwo sendDataToParent={receiveDataFromChild} />
                       <div className="text-end toolbar toolbar-bottom p-2">
                         <button
                           className="btn btn-secondary sw-btn-prev me-1"
@@ -355,7 +355,7 @@ const Wizard = () => {
                         </button>
                         <button
                           className="btn btn-primary sw-btn-next ms-1"
-                          onClick={() => handleStepTwo()}>
+                          onClick={() => setGoSteps(2)}>
                           Next
                         </button>
                       </div>

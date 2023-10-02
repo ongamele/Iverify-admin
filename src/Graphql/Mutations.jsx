@@ -28,6 +28,7 @@ export const CREATE_APPLICATION = gql`
     $suburb: String
     $wardNumber: String
     $municipality: String
+    $municipalAccountNumber: String
     $companyRegNumber: String
     $companyType: String
     $applicantIdNumber: String
@@ -69,6 +70,7 @@ export const CREATE_APPLICATION = gql`
         suburb: $suburb
         wardNumber: $wardNumber
         municipality: $municipality
+        municipalAccountNumber: $municipalAccountNumber
         companyRegNumber: $companyRegNumber
         companyType: $companyType
         applicantIdNumber: $applicantIdNumber
@@ -142,9 +144,11 @@ export const GET_SELECTED_APPLICATION = gql`
       postalCode
       country
       municipality
+      municipalAccountNumber
       race
       houseHoldHead
       maritalStatus
+      wardNumber
       dependents
       bankStatement
       idBook

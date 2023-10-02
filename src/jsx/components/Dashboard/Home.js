@@ -1,22 +1,25 @@
-import React, { useContext, useEffect } from "react";
+import React, { useMemo, useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 //Import Components
 import { useQuery } from "@apollo/client";
-import { ThemeContext } from "../../../context/ThemeContext";
+
+import Modal from "react-bootstrap/Modal";
+import SelectedDetails from "./SelectedDetails";
 import { AuthContext } from "../context-auth/auth";
-import { GET_ALL_APPLICATIONS } from "../../../Graphql/Queries";
-import { GET_SUCCESSFUL_APPLICATIONS } from "../../../Graphql/Queries";
-import { GET_FAILED_APPLICATIONS } from "../../../Graphql/Queries";
-import { GET_LATEST_APPLICATIONS } from "../../../Graphql/Queries";
+import { GET_ALL_APPLICATIONS_COUNT } from "../../../Graphql/Queries";
+import { GET_SUCCESSFUL_APPLICATIONS_COUNT } from "../../../Graphql/Queries";
+import { GET_FAILED_APPLICATIONS_COUNT } from "../../../Graphql/Queries";
+import { GET_LATEST_APPLICATIONS_COUNT } from "../../../Graphql/Queries";
+import { COLUMNS } from "../table/FilteringTable/Columns";
+
 const Home = () => {
   const { user } = useContext(AuthContext);
-  const { changeBackground } = useContext(ThemeContext);
-  useEffect(() => {
-    changeBackground({ value: "light", label: "Light" });
-  }, []);
+  const [show, setShow] = useState(false);
+  const [id, setId] = useState(false);
+  const [dataType, setDataType] = useState(false);
 
-  const { data: totalApplications } = useQuery(GET_ALL_APPLICATIONS, {
+  const { data: totalApplications } = useQuery(GET_ALL_APPLICATIONS_COUNT, {
     pollInterval: 4000,
     variables: {
       userId: user.id,
@@ -24,7 +27,7 @@ const Home = () => {
   });
 
   const { data: successfulApplications } = useQuery(
-    GET_SUCCESSFUL_APPLICATIONS,
+    GET_SUCCESSFUL_APPLICATIONS_COUNT,
     {
       pollInterval: 4000,
       variables: {
@@ -33,14 +36,14 @@ const Home = () => {
     }
   );
 
-  const { data: failedApplications } = useQuery(GET_FAILED_APPLICATIONS, {
+  const { data: failedApplications } = useQuery(GET_FAILED_APPLICATIONS_COUNT, {
     pollInterval: 4000,
     variables: {
       userId: user.id,
     },
   });
 
-  const { data: latestApplications } = useQuery(GET_LATEST_APPLICATIONS, {
+  const { data: latestApplications } = useQuery(GET_LATEST_APPLICATIONS_COUNT, {
     pollInterval: 4000,
     variables: {
       userId: user.id,
@@ -68,27 +71,44 @@ const Home = () => {
     return (fail * 100) / success;
   }
 
+  function handleDetails(type, id) {
+    setId(id);
+    setDataType(type);
+    setShow(true);
+  }
+
   return (
     <>
+      <Modal show={show} fullscreen={true} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <SelectedDetails dataType={dataType} id={id} />
+        </Modal.Body>
+      </Modal>
       <div className="row">
         <div className="col-xl-12">
           <div className="row">
             <div className="col-xl-12">
               <div className="row">
                 <div className="col-xl-3 col-sm-6">
-                  <div className="card booking">
+                  <div
+                    className="card booking"
+                    onClick={() => handleDetails("all", user.id)}
+                    style={{ cursor: "pointer" }}>
                     <div className="card-body">
                       <div className="booking-status d-flex align-items-center">
                         <span>
                           <i
                             className="fas fa-book"
-                            style={{ fontSize: "22px", color: "#E23428" }}
+                            style={{ fontSize: "22px", color: "#009BD7" }}
                           />
                         </span>
                         <div className="ms-4">
                           <h2 className="mb-0 font-w600">
                             {totalApplications &&
-                              totalApplications.getAllApplications}
+                              totalApplications.getAllApplicationsCount}
                           </h2>
                           <p className="mb-0 text-nowrap">Total Requests</p>
                         </div>
@@ -97,41 +117,47 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="col-xl-3 col-sm-6">
-                  <div className="card booking">
+                  <div
+                    className="card booking"
+                    onClick={() => handleDetails("latest", user.id)}
+                    style={{ cursor: "pointer" }}>
                     <div className="card-body">
                       <div className="booking-status d-flex align-items-center">
                         <span>
                           <i
                             className="fas fa-clipboard"
-                            style={{ fontSize: "22px", color: "#E23428" }}
+                            style={{ fontSize: "22px", color: "#009BD7" }}
                           />
                         </span>
                         <div className="ms-4">
                           <h2 className="mb-0 font-w600">
                             {" "}
                             {latestApplications &&
-                              latestApplications.getLatestApplications}
+                              latestApplications.getLatestApplicationsCount}
                           </h2>
-                          <p className="mb-0 text-nowrap ">New Requests</p>
+                          <p className="mb-0 text-nowrap ">Pending</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="col-xl-3 col-sm-6">
-                  <div className="card booking">
+                  <div
+                    className="card booking"
+                    onClick={() => handleDetails("approved", user.id)}
+                    style={{ cursor: "pointer" }}>
                     <div className="card-body">
                       <div className="booking-status d-flex align-items-center">
                         <span>
                           <i
                             className="fas fa-users"
-                            style={{ fontSize: "22px", color: "#E23428" }}
+                            style={{ fontSize: "22px", color: "#009BD7" }}
                           />
                         </span>
                         <div className="ms-4">
                           <h2 className="mb-0 font-w600">
                             {successfulApplications &&
-                              successfulApplications.getSuccessfulApplications}
+                              successfulApplications.getSuccessfulApplicationsCount}
                           </h2>
                           <p className="mb-0">Approved</p>
                         </div>
@@ -140,19 +166,22 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="col-xl-3 col-sm-6">
-                  <div className="card booking">
+                  <div
+                    className="card booking"
+                    onClick={() => handleDetails("declined", user.id)}
+                    style={{ cursor: "pointer" }}>
                     <div className="card-body">
                       <div className="booking-status d-flex align-items-center">
                         <span>
                           <i
                             className="fas fa-exclamation"
-                            style={{ fontSize: "22px", color: "#E23428" }}
+                            style={{ fontSize: "22px", color: "#009BD7" }}
                           />
                         </span>
                         <div className="ms-4">
                           <h2 className="mb-0 font-w600">
                             {failedApplications &&
-                              failedApplications.getFailedApplications}
+                              failedApplications.getFailedApplicationsCount}
                           </h2>
                           <p className="mb-0">Rejected</p>
                         </div>
@@ -162,12 +191,15 @@ const Home = () => {
                 </div>
               </div>
             </div>
+
             <div className="col-xl-12">
               <div className="row">
                 <div className="col-xl-6">
                   <div className="row">
                     <div className="col-xl-6 col-sm-6">
-                      <div className="card bg-secondary">
+                      <div
+                        className="card"
+                        style={{ backgroundColor: "#2AD45E" }}>
                         <div className="card-body">
                           <div className="d-flex align-items-end pb-4 justify-content-between">
                             <span className="fs-14 font-w500 text-white">
@@ -176,7 +208,7 @@ const Home = () => {
                             <span className="fs-20 font-w600 text-white">
                               <span className="pe-2"></span>
                               {successfulApplications &&
-                                successfulApplications.getSuccessfulApplications}
+                                successfulApplications.getSuccessfulApplicationsCount}
                             </span>
                           </div>
                           <div className="progress default-progress h-auto">
@@ -193,7 +225,9 @@ const Home = () => {
                       </div>
                     </div>
                     <div className="col-xl-6 col-sm-6">
-                      <div className="card bg-secondary">
+                      <div
+                        className="card declined-card"
+                        style={{ backgroundColor: "#AD0900" }}>
                         <div className="card-body">
                           <div className="d-flex align-items-end pb-4 justify-content-between">
                             <span className="fs-14 font-w500 text-white">
@@ -202,7 +236,7 @@ const Home = () => {
                             <span className="fs-20 font-w600 text-white">
                               <span className="pe-2"></span>
                               {failedApplications &&
-                                failedApplications.getFailedApplications}
+                                failedApplications.getFailedApplicationsCount}
                             </span>
                           </div>
                           <div className="progress default-progress h-auto">
@@ -222,16 +256,6 @@ const Home = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-xl-12">
-          <div className="card">
-            <div className="card-header border-0 pb-0">
-              <h4 className="fs-20">New Applications</h4>
-            </div>
-            <div className="card-body pt-0"></div>
           </div>
         </div>
       </div>

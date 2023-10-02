@@ -3,6 +3,7 @@ import React, { useMemo, useContext, useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import PageTitle from "../../../layouts/PageTitle";
 import jsPDF from "jspdf";
+import * as XLSX from "xlsx";
 import "jspdf-autotable";
 import {
   useTable,
@@ -12,8 +13,6 @@ import {
 } from "react-table";
 import Modal from "react-bootstrap/Modal";
 import { COLUMNS } from "./Columns";
-import { GlobalFilter } from "./GlobalFilter";
-//import './table.css';
 import "./filtering.css";
 import { AuthContext } from "../../context-auth/auth";
 import { GET_APPLICATIONS } from "../../../../Graphql/Queries";
@@ -22,6 +21,7 @@ import { GET_SELECTED_APPLICATION } from "../../../../Graphql/Mutations";
 export const FilteringTable = () => {
   const [show, setShow] = useState(false);
   const [id, setId] = useState("");
+  const [excelId, setExcelId] = useState("");
   const { user } = useContext(AuthContext);
 
   const {
@@ -62,10 +62,20 @@ export const FilteringTable = () => {
         doc.setFontSize(10);
         doc.setFont(undefined, "bold");
         doc
-          .text("CANDIDATE PERSONAL INFORMATION", 15, 60)
+          .text("CANDIDATE PERSONAL INFORMATION", 15, 64)
+          .text(
+            `Ward Number: ${result.data.getSelectedApplication.wardNumber}`,
+            15,
+            70
+          )
+          .text(
+            `Municipal Acc Number: ${result.data.getSelectedApplication.municipalAccountNumber}`,
+            15,
+            76
+          )
           .setFont(undefined, "bold");
         doc.autoTable({
-          startY: 70,
+          startY: 80,
           startX: 10,
           headStyles: { fillColor: [219, 50, 39] },
           columns: [
@@ -81,7 +91,7 @@ export const FilteringTable = () => {
         doc.save("report.pdf");
       },
       onError(err) {
-        console.lo("Application Not Found! " + err);
+        console.log("Application Not Found! " + err);
       },
 
       variables: {
@@ -90,41 +100,34 @@ export const FilteringTable = () => {
     }
   );
 
-  function downloadPdf(id) {
-    /* let left = 15;
-    let top = 8;
-    const imgWidth = 30;
-    const imgHeight = 30;
+  const [getSelectedApplicationExcel, { loading: excelLoading }] = useMutation(
+    GET_SELECTED_APPLICATION,
+    {
+      update(_, result) {
+        var rowsData = [];
 
-    const doc = new jsPDF();
-    var img = new Image();
-    img.src = require("../../../../images/logo-full.png");
-    doc.addImage(img, "png", left, top, imgWidth, imgHeight);
-    doc.setFont(undefined, "bold");
-    doc.text("Application Report", 80, 44);
+        rowsData.push({
+          name: result.data.getSelectedApplication.name,
+          surname: result.data.getSelectedApplication.surname,
+          idNumber: result.data.getSelectedApplication.idNumber,
+          status: result.data.getSelectedApplication.status,
+          reason: result.data.getSelectedApplication.reason,
+        });
 
-    doc.setFontSize(10);
-    doc.setFont(undefined, "bold");
-    doc
-      .text("PERSONAL INFORMATION OF CANDIDATE", 15, 50)
-      .setFont(undefined, "bold");
-    doc.autoTable({
-      startY: 129,
-      startX: 10,
-      headStyles: { fillColor: [143, 34, 13] },
-      columns: [
-        { dataKey: "firstName", header: "Name" },
+        const ws = XLSX.utils.json_to_sheet(rowsData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+        XLSX.writeFile(wb, "report" + ".xlsx");
+      },
+      onError(err) {
+        console.log("Application Not Found! " + err);
+      },
 
-        { dataKey: "lastName", header: "Surname" },
-        { dataKey: "idNumber", header: "Id Number" },
-        { dataKey: "status", header: "Status" },
-        { dataKey: "reason", header: "Reason" },
-      ],
-      body: applicationData,
-    });
-
-    doc.save("report.pdf");*/
-  }
+      variables: {
+        id: excelId,
+      },
+    }
+  );
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -168,27 +171,34 @@ export const FilteringTable = () => {
     previousPage,
     canNextPage,
     canPreviousPage,
-    setGlobalFilter,
   } = tableInstance;
 
-  const { globalFilter, pageIndex } = state;
+  const { pageIndex } = state;
 
   function handleButtonClick(row) {
     const rowData = row.original;
-    if (rowData.status == "Declined") {
-      setShow(true);
-    } else {
-      alert("Can not upload document because the application was declined!");
-    }
-  }
-
-  function handlePDFDownload(rowId) {
-    // getSelectedApplication();
+    setShow(true);
   }
 
   useEffect(() => {
     getSelectedApplication();
   }, [id]);
+
+  function exportToExcel(data, filename) {
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    XLSX.writeFile(wb, filename + ".xlsx");
+  }
+
+  const handleExcellExportClick = (row) => {
+    const data = row.original;
+    exportToExcel(data, "my_data");
+  };
+
+  useEffect(() => {
+    getSelectedApplicationExcel();
+  }, [excelId]);
 
   return (
     <>
@@ -236,7 +246,7 @@ export const FilteringTable = () => {
                       aria-hidden="true"
                       style={{ color: "#DB3227" }}></i>
                   </span>
-                  <span className="mail-text">Proof Of Address</span>
+                  <span className="mail-text">Affidavid</span>
                 </label>
               </div>
             </div>
@@ -278,7 +288,6 @@ export const FilteringTable = () => {
         </div>
         <div className="card-body">
           <div className="table-responsive">
-            <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
             <table {...getTableProps()} className="table dataTable display">
               <thead>
                 {headerGroups.map((headerGroup) => (
@@ -306,22 +315,32 @@ export const FilteringTable = () => {
                         );
                       })}
                       <td>
-                        <button
-                          className="btn btn-primary btn-sm sw-btn-next ms-1"
-                          onClick={() => handleButtonClick(row)}>
-                          Docs
-                        </button>
+                        {row.original.status == "Approved" ? (
+                          <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() => handleButtonClick(row)}>
+                            DOCS
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-primary-dissabled btn-sm"
+                            onClick={() =>
+                              console.log("Cannot upload document")
+                            }>
+                            DOCS
+                          </button>
+                        )}
                       </td>
-                      <td>
-                        <i
-                          className="mdi mdi-download"
-                          aria-hidden="true"
-                          style={{
-                            color: "#DB3227",
-                            fontSize: 22,
-                            cursor: "pointer",
-                          }}
-                          onClick={() => setId(row.original.id)}></i>
+
+                      <td
+                        onClick={() => setId(row.original.id)}
+                        style={{ cursor: "pointer" }}>
+                        PDF
+                      </td>
+                      <td
+                        onClick={() => setExcelId(row.original.id)}
+                        style={{ cursor: "pointer" }}>
+                        EXCEL
                       </td>
                     </tr>
                   );
