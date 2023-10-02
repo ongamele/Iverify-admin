@@ -80,7 +80,7 @@ export const FilteringTable = () => {
         doc.autoTable({
           startY: 80,
           startX: 10,
-          headStyles: { fillColor: [219, 50, 39] },
+          headStyles: { fillColor: [0, 129, 199] },
           columns: [
             { dataKey: "name", header: "Name" },
             { dataKey: "surname", header: "Surname" },
