@@ -56,6 +56,9 @@ export const FilteringTable = () => {
         var img = new Image();
         img.src = require("../../../../images/logo-full.png");
         doc.addImage(img, "png", left, top, imgWidth, imgHeight);
+        doc.setFontSize(8);
+        doc.text("Valid for 3 months", 166, 12);
+        doc.setFontSize(10);
         doc.setFont(undefined, "bold");
         doc.text("Application Report", 80, 44);
 
@@ -190,11 +193,6 @@ export const FilteringTable = () => {
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
     XLSX.writeFile(wb, filename + ".xlsx");
   }
-
-  const handleExcellExportClick = (row) => {
-    const data = row.original;
-    exportToExcel(data, "my_data");
-  };
 
   useEffect(() => {
     getSelectedApplicationExcel();

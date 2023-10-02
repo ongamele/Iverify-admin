@@ -147,8 +147,7 @@ const Wizard = () => {
           try {
             const apiKey =
               "2319f2b218dfee20edf691f73ccba12f-73d582c6-316c-4b53-a90c-1c0c1fa1c94f";
-            const message = `Hello, Your Iverify OTP is ${result.data.createApplication}`;
-
+            const message = `Hello, ${result.data.createApplication}`;
             const response = await axios.post(
               "https://api.infobip.com/sms/1/text/single",
               {
