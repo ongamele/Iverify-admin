@@ -29,6 +29,7 @@ import Wizard from "./components/Forms/Wizard/Wizard";
 
 import Setting from "./layouts/Setting";
 import { ThemeContext } from "../context/ThemeContext";
+import ForgotPassword from "./pages/ForgotPassword";
 
 const Markup = () => {
   // const { menuToggle } = useContext(ThemeContext);
@@ -56,6 +57,10 @@ const Markup = () => {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route
+            path="/forgot-password/:id/reset/:tokenn"
+            element={<ForgotPassword />}
+          />
           <Route element={<MainLayout />}>
             {allroutes.map((data, i) => (
               <Route

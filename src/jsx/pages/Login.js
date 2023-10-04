@@ -8,6 +8,7 @@ import "./style.css";
 import logo from "../../images/logo-full.png";
 import { AuthContext } from "../components/context-auth/auth";
 import { LOGIN_USER } from "../../Graphql/Mutations";
+import { FORGOT_PASSWORD } from "../../Graphql/Mutations";
 
 function Login(props) {
   const [email, setEmail] = useState("");
@@ -34,8 +35,34 @@ function Login(props) {
     },
   });
 
+  const [forgotPassword, { loading: resetPasswordLoading }] = useMutation(
+    FORGOT_PASSWORD,
+    {
+      update(_, result) {
+        if (result) {
+          alert(result.data.forgotPassword);
+        }
+      },
+      onError(err) {
+        alert("User Not Found!");
+      },
+
+      variables: {
+        email,
+      },
+    }
+  );
+
   function login() {
     loginUser();
+  }
+
+  function onForgotPassword() {
+    if (email != "") {
+      forgotPassword();
+    } else {
+      alert("Please provide your email address!");
+    }
   }
 
   return (
@@ -133,6 +160,14 @@ function Login(props) {
                       onClick={login}>
                       Sign In
                     </button>
+                  </div>
+                  <div className="new-account mt-3">
+                    <p>
+                      Forgot password?{" "}
+                      <Link className="text-primary" onClick={onForgotPassword}>
+                        Reset
+                      </Link>
+                    </p>
                   </div>
                 </div>
               </div>

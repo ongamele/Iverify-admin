@@ -146,6 +146,7 @@ export const GET_SELECTED_APPLICATION = gql`
       municipality
       municipalAccountNumber
       race
+      gender
       houseHoldHead
       maritalStatus
       wardNumber
@@ -157,5 +158,17 @@ export const GET_SELECTED_APPLICATION = gql`
       reason
       createdAt
     }
+  }
+`;
+
+export const FORGOT_PASSWORD = gql`
+  mutation forgotPassword($email: String!) {
+    forgotPassword(email: $email)
+  }
+`;
+
+export const UPDATE_PASSWORD = gql`
+  mutation updatePassword($id: String!, $password: String!) {
+    updatePassword(id: $id, password: $password)
   }
 `;

@@ -38,14 +38,23 @@ export const FilteringTable = () => {
     GET_SELECTED_APPLICATION,
     {
       update(_, result) {
-        var rowsData = [];
+        var rowsData1 = [];
+        var rowsData2 = [];
 
-        rowsData.push({
+        rowsData1.push({
           name: result.data.getSelectedApplication.name,
           surname: result.data.getSelectedApplication.surname,
           idNumber: result.data.getSelectedApplication.idNumber,
+          gender: result.data.getSelectedApplication.gender,
+          phoneNumber: result.data.getSelectedApplication.phoneNumber,
+          municipality: result.data.getSelectedApplication.municipality,
+          wardNumber: result.data.getSelectedApplication.wardNumber,
+        });
+
+        rowsData2.push({
           status: result.data.getSelectedApplication.status,
           reason: result.data.getSelectedApplication.reason,
+          createdAt: result.data.getSelectedApplication.createdAt,
         });
         let left = 15;
         let top = 8;
@@ -85,10 +94,28 @@ export const FilteringTable = () => {
             { dataKey: "name", header: "Name" },
             { dataKey: "surname", header: "Surname" },
             { dataKey: "idNumber", header: "Id Number" },
-            { dataKey: "status", header: "Status" },
-            { dataKey: "reason", header: "Reason" },
+            { dataKey: "gender", header: "Gender" },
+            { dataKey: "phoneNumber", header: "Phone No" },
+            { dataKey: "municipality", header: "Municipality" },
+            { dataKey: "wardNumber", header: "Ward No" },
           ],
-          body: rowsData,
+          body: rowsData1,
+        });
+
+        doc.setFontSize(10);
+        doc.setFont(undefined, "bold");
+        doc.text("SYSTEM DECISION", 15, 104).setFont(undefined, "bold");
+
+        doc.autoTable({
+          startY: 110,
+          startX: 10,
+          headStyles: { fillColor: [0, 129, 199] },
+          columns: [
+            { dataKey: "status", header: "Decision" },
+            { dataKey: "reason", header: "Reason" },
+            { dataKey: "createdAt", header: "Date" },
+          ],
+          body: rowsData2,
         });
 
         doc.save("report.pdf");
@@ -186,13 +213,6 @@ export const FilteringTable = () => {
   useEffect(() => {
     getSelectedApplication();
   }, [id]);
-
-  function exportToExcel(data, filename) {
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-    XLSX.writeFile(wb, filename + ".xlsx");
-  }
 
   useEffect(() => {
     getSelectedApplicationExcel();
@@ -334,11 +354,6 @@ export const FilteringTable = () => {
                         onClick={() => setId(row.original.id)}
                         style={{ cursor: "pointer" }}>
                         PDF
-                      </td>
-                      <td
-                        onClick={() => setExcelId(row.original.id)}
-                        style={{ cursor: "pointer" }}>
-                        EXCEL
                       </td>
                     </tr>
                   );
