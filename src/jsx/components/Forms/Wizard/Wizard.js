@@ -279,13 +279,13 @@ const Wizard = () => {
 
   const handleStepOne = () => {
     var message = "";
-    if (isConsent /*&& sentOtp == otp*/) {
+    if (isConsent && sentOtp == otp) {
       setGoSteps(1);
     } else {
       if (!isConsent) {
         message += "Please agree to our terms to proceed! ";
       }
-      if (/*sentOtp !== */ otp == "") {
+      if (sentOtp !== otp || otp == "") {
         message += "Please check your OTP or restart the form!";
       }
       if (message !== "") {
