@@ -143,11 +143,6 @@ export const FilteringTable = () => {
           status: result.data.getSelectedApplication.status,
           reason: result.data.getSelectedApplication.reason,
         });
-
-        const ws = XLSX.utils.json_to_sheet(rowsData);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-        XLSX.writeFile(wb, "report" + ".xlsx");
       },
       onError(err) {
         console.log("Application Not Found! " + err);

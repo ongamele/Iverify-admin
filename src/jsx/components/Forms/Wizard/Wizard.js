@@ -278,16 +278,20 @@ const Wizard = () => {
   }
 
   const handleStepOne = () => {
-    //if (isConsent && sentOtp == otp) {
-    setGoSteps(1);
-    /*} else {
+    var message = "";
+    if (isConsent /*&& sentOtp == otp*/) {
+      setGoSteps(1);
+    } else {
       if (!isConsent) {
-        alert(isConsent);
+        message += "Please agree to our terms to proceed! ";
       }
-      if (sentOtp !== otp) {
-        alert("Incorrect OTP. Please check your OTP or restart the form!");
+      if (/*sentOtp !== */ otp == "") {
+        message += "Please check your OTP or restart the form!";
       }
-    }*/
+      if (message !== "") {
+        alert(message);
+      }
+    }
   };
 
   //setGoSteps(1)
@@ -298,7 +302,7 @@ const Wizard = () => {
           <Toast
             onClose={() => setToastShow(false)}
             show={toastShow}
-            delay={3000}
+            delay={10000}
             autohide>
             <Toast.Header>
               <img

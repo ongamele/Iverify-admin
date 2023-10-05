@@ -52,23 +52,25 @@ const Home = () => {
   var successCount = 0;
   var failureCount = 0;
 
-  if (failedApplications && failedApplications.getFailedApplications) {
-    failureCount = failedApplications.getFailedApplications;
+  if (failedApplications && failedApplications.getFailedApplicationsCount) {
+    failureCount = failedApplications.getFailedApplicationsCount;
   }
 
   if (
     successfulApplications &&
-    successfulApplications.getSuccessfulApplications
+    successfulApplications.getSuccessfulApplicationsCount
   ) {
-    successCount = successfulApplications.getSuccessfulApplications;
+    successCount = successfulApplications.getSuccessfulApplicationsCount;
   }
 
   function successPercentage(success, fail) {
-    return (success * 100) / fail;
+    var tot = fail + success;
+    return (success * 100) / tot;
   }
 
   function failurePercentage(success, fail) {
-    return (fail * 100) / success;
+    var tot = fail + success;
+    return (fail * 100) / tot;
   }
 
   function handleDetails(type, id) {
@@ -199,11 +201,15 @@ const Home = () => {
                     <div className="col-xl-6 col-sm-6">
                       <div
                         className="card"
-                        style={{ backgroundColor: "#2AD45E" }}>
+                        style={{
+                          backgroundColor: "#2AD45E",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => handleDetails("approved", user.id)}>
                         <div className="card-body">
                           <div className="d-flex align-items-end pb-4 justify-content-between">
                             <span className="fs-14 font-w500 text-white">
-                              Total Approvals
+                              Total Approved
                             </span>
                             <span className="fs-20 font-w600 text-white">
                               <span className="pe-2"></span>
@@ -214,7 +220,13 @@ const Home = () => {
                           <div className="progress default-progress h-auto">
                             <div
                               className="progress-bar bg-white progress-animated"
-                              style={{ width: "0%", height: "13px" }}>
+                              style={{
+                                width: `${successPercentage(
+                                  successCount,
+                                  failureCount
+                                )}%`,
+                                height: "13px",
+                              }}>
                               <span className="sr-only">
                                 {successPercentage(successCount, failureCount)}%
                                 Complete
@@ -227,11 +239,15 @@ const Home = () => {
                     <div className="col-xl-6 col-sm-6">
                       <div
                         className="card declined-card"
-                        style={{ backgroundColor: "#AD0900" }}>
+                        style={{
+                          backgroundColor: "#AD0900",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => handleDetails("declined", user.id)}>
                         <div className="card-body">
                           <div className="d-flex align-items-end pb-4 justify-content-between">
                             <span className="fs-14 font-w500 text-white">
-                              Declined
+                              Total Declined
                             </span>
                             <span className="fs-20 font-w600 text-white">
                               <span className="pe-2"></span>
@@ -242,7 +258,13 @@ const Home = () => {
                           <div className="progress default-progress h-auto">
                             <div
                               className="progress-bar bg-white progress-animated"
-                              style={{ width: "0%", height: "13px" }}>
+                              style={{
+                                width: `${failurePercentage(
+                                  successCount,
+                                  failureCount
+                                )}%`,
+                                height: "13px",
+                              }}>
                               <span className="sr-only">
                                 {failurePercentage(successCount, failureCount)}%
                                 Complete

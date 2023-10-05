@@ -31,6 +31,7 @@ const StepTwo = ({ sendDataToParent }) => {
       const min = 10000; // Minimum 5-digit number
       const max = 99999; // Maximum 5-digit number
       const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+      console.log(randomNum);
       setSentOtp(randomNum);
       const apiKey =
         "2319f2b218dfee20edf691f73ccba12f-73d582c6-316c-4b53-a90c-1c0c1fa1c94f";
