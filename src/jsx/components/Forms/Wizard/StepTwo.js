@@ -223,29 +223,17 @@ const StepTwo = ({ sendDataToParent }) => {
                 onChange={(e) => setMunicipality(e.target.value)}
                 className="form-control form-control-md">
                 <option></option>
-                <option vlaue="Buffalo City Metropolitan">
-                  Buffalo City Metropolitan
+                <option vlaue="Makhado Local Municipality">
+                  Makhado Local Municipality
                 </option>
-                <option value="City of Cape Town Metropolitan">
-                  City of Cape Town Metropolitan
+                <option value="Thulamela Local Municipality">
+                  Thulamela Local Municipality
                 </option>
-                <option value="City of Ekurhuleni Metropolitan">
-                  City of Ekurhuleni Metropolitan
+                <option value="	Collins Chabane Local Municipality	">
+                  Collins Chabane Local Municipality
                 </option>
-                <option value="City of Johannesburg Metropolitan">
-                  City of Johannesburg Metropolitan
-                </option>
-                <option value="City of Tshwane Metropolitan">
-                  City of Tshwane Metropolitan
-                </option>
-                <option value="eThekwini Metropolitan">
-                  eThekwini Metropolitan
-                </option>
-                <option value="Mangaung Metropolitan">
-                  Mangaung Metropolitan
-                </option>
-                <option value="Nelson Mandela Bay Metropolitan">
-                  Nelson Mandela Bay Metropolitan
+                <option value="Musina Local Municipality">
+                  Musina Local Municipality
                 </option>
               </select>
             </div>
