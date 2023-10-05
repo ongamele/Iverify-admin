@@ -229,7 +229,7 @@ const StepTwo = ({ sendDataToParent }) => {
                 <option value="Thulamela Local Municipality">
                   Thulamela Local Municipality
                 </option>
-                <option value="	Collins Chabane Local Municipality	">
+                <option value="Collins Chabane Local Municipality">
                   Collins Chabane Local Municipality
                 </option>
                 <option value="Musina Local Municipality">
